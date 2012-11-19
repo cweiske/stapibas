@@ -51,6 +51,7 @@ class PingbackStorage
             )
         );
     }
+
     /**
      * Verifies that a link from $source to $target exists.
      *
@@ -70,7 +71,27 @@ class PingbackStorage
     }
 }
 
+class PingbackMailer
+    implements \PEAR2\Services\Pingback2\Server_Callback_IStorage
+{
+    public function storePingback(
+        $target, $source, $sourceBody, \HTTP_Request2_Response $res
+    ) {
+        mail(
+            'cweiske@cweiske.de',
+            'New pingback',
+            "A pingback just came in, for\n"
+            . '> '  . $target . "\n"
+            . "from\n"
+            . '> ' . $source . "\n"
+            . "\n\nLove, stapibas",
+            "From: stapibas <server@cweiske.de>"
+        );
+    }
+}
+
 $s = new \PEAR2\Services\Pingback2\Server();
 $s->addCallback(new PingbackStorage($db));
+$s->addCallback(new PingbackMailer());
 $s->run();
 ?>
