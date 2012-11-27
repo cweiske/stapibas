@@ -22,8 +22,8 @@ function __autoload($className)
 $db = new PDO($dbdsn, $dbuser, $dbpass);
 
 class PingbackStorage
-    implements \PEAR2\Services\Pingback2\Server_Callback_IStorage,
-    \PEAR2\Services\Pingback2\Server_Callback_ILink
+    implements \PEAR2\Services\Pingback\Server\Callback\IStorage,
+    \PEAR2\Services\Pingback\Server\Callback\ILink
 {
     public function __construct(PDO $db)
     {
@@ -72,7 +72,7 @@ class PingbackStorage
 }
 
 class PingbackMailer
-    implements \PEAR2\Services\Pingback2\Server_Callback_IStorage
+    implements \PEAR2\Services\Pingback\Server\Callback\IStorage
 {
     public function storePingback(
         $target, $source, $sourceBody, \HTTP_Request2_Response $res
@@ -90,7 +90,7 @@ class PingbackMailer
     }
 }
 
-$s = new \PEAR2\Services\Pingback2\Server();
+$s = new \PEAR2\Services\Pingback\Server();
 $s->addCallback(new PingbackStorage($db));
 $s->addCallback(new PingbackMailer());
 $s->run();
