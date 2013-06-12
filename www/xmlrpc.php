@@ -3,21 +3,7 @@
  * Simply stores all pingbacks in the database.
  */
 require_once __DIR__ . '/../data/config.php';
-
-function __autoload($className)
-{
-    $className = ltrim($className, '\\');
-    $fileName  = '';
-    $namespace = '';
-    if ($lastNsPos = strripos($className, '\\')) {
-        $namespace = substr($className, 0, $lastNsPos);
-        $className = substr($className, $lastNsPos + 1);
-        $fileName  = str_replace('\\', '/', $namespace) . '/';
-    }
-    $fileName .= str_replace('_', '/', $className) . '.php';
-
-    require $fileName;
-}
+require_once 'stapibas/autoloader.php';
 
 $db = new PDO($dbdsn, $dbuser, $dbpass);
 

@@ -1,0 +1,12 @@
+#!/usr/bin/env php
+<?php
+namespace stapibas;
+require_once __DIR__ . '/../data/config.php';
+require_once 'stapibas/autoloader.php';
+
+$uf = new Feed_UpdateFeeds();
+$uf->db = new PDO($dbdsn, $dbuser, $dbpass);
+$uf->log = new Logger();
+$uf->updateAll();
+
+?>
