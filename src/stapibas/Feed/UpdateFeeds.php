@@ -11,9 +11,10 @@ class Feed_UpdateFeeds
 
     public function updateAll()
     {
+        $this->log->info('Updating feeds..');
         $res = $this->db->query(
             'SELECT * FROM feeds'
-            . ' WHERE f_needs_update = 1 OR f_updated = "0000-00-00"'
+            . ' WHERE f_needs_update = 1 OR f_updated = "0000-00-00 00:00:00"'
         );
         while ($feedRow = $res->fetch(\PDO::FETCH_OBJ)) {
             $this->log->info(
@@ -21,6 +22,7 @@ class Feed_UpdateFeeds
             );
             $this->updateFeed($feedRow);
         }
+        $this->log->info('Finished updating feeds.');
     }
 
     protected function updateFeed($feedRow)
@@ -45,7 +47,7 @@ class Feed_UpdateFeeds
 
         if (intval($res->getStatus() / 100) != 2) {
             //no 2xx is an error for us
-            $this->log->info('Error fetching feed');
+            $this->log->err('Error fetching feed');
             return;
         }
 
