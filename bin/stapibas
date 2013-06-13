@@ -17,4 +17,9 @@ $uf->db = $db;
 $uf->log = $log;
 $uf->updateAll();
 
+$uf = new Feed_PingUrls();
+$uf->db = $db;
+$uf->log = $log;
+$uf->pingAll();
+
 ?>
