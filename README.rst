@@ -13,11 +13,13 @@ Dependencies
 ============
 - PHP 5.3+
 - PDO
+- `Console_CommandLine`__
 - `Net_URL2`__
 - `HTTP_Request2`__
 - `PEAR2 Services_Pingback`__
 - `SimplePie`__
 
+__ http://pear.php.net/package/Console_CommandLine
 __ http://pear.php.net/package/Net_URL2
 __ http://pear.php.net/package/HTTP_Request2
 __ https://github.com/pear2/Services_Pingback

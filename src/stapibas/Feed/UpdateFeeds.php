@@ -9,24 +9,59 @@ class Feed_UpdateFeeds
     public $db;
     public $log;
 
+    public function __construct(Dependencies $deps)
+    {
+        $this->deps = $deps;
+        $this->db   = $deps->db;
+        $this->log  = $deps->log;
+    }
+
     public function updateAll()
     {
         $this->log->info('Updating feeds..');
         $res = $this->db->query(
             'SELECT * FROM feeds'
-            . ' WHERE f_needs_update = 1 OR f_updated = "0000-00-00 00:00:00"'
+            . ' WHERE ' . $this->sqlNeedsUpdate()
         );
         while ($feedRow = $res->fetch(\PDO::FETCH_OBJ)) {
-            $this->log->info(
-                sprintf('Updating feed #%d: %s', $feedRow->f_id, $feedRow->f_url)
-            );
             $this->updateFeed($feedRow);
         }
         $this->log->info('Finished updating feeds.');
     }
 
+    public function updateSome($urlOrIds)
+    {
+        $options = array();
+        foreach ($urlOrIds as $urlOrId) {
+            if (is_numeric($urlOrId)) {
+                $options[] = 'f_id = ' . intval($urlOrId);
+            } else {
+                $options[] = 'f_url = ' . $this->db->quote($urlOrId);
+            }
+        }
+
+        $this->log->info('Updating %d feeds..', $options);
+        $res = $this->db->query(
+            'SELECT * FROM feeds'
+            . ' WHERE'
+            . $this->sqlNeedsUpdate()
+            . ' AND (' . implode(' OR ', $options) . ')'
+        );
+
+        $items = 0;
+        while ($feedRow = $res->fetch(\PDO::FETCH_OBJ)) {
+            ++$items;
+            $this->updateFeed($feedRow);
+        }
+        $this->log->info('Finished updating %d feeds.', $items);
+    }
+
     protected function updateFeed($feedRow)
     {
+        $this->log->info(
+            'Updating feed #%d: %s', $feedRow->f_id, $feedRow->f_url
+        );
+
         $req = new \HTTP_Request2($feedRow->f_url);
         $req->setHeader('User-Agent', 'stapibas');
 
@@ -97,10 +132,8 @@ class Feed_UpdateFeeds
             }
         }
         $this->log->info(
-            sprintf(
-                'Feed #%d: %d new, %d updated of %d entries',
-                $feedRow->f_id, $new, $updated, $items
-            )
+            'Feed #%d: %d new, %d updated of %d entries',
+            $feedRow->f_id, $new, $updated, $items
         );
         $this->setUpdated($feedRow, $res);
     }
@@ -125,6 +158,12 @@ class Feed_UpdateFeeds
         );
     }
 
+    protected function sqlNeedsUpdate()
+    {
+        if ($this->deps->options['force']) {
+            return ' 1';
+        }
+        return ' (f_needs_update = 1 OR f_updated = "0000-00-00 00:00:00")';
+    }
 }
-
 ?>

@@ -4,22 +4,6 @@ namespace stapibas;
 require_once __DIR__ . '/../data/config.php';
 require_once 'stapibas/autoloader.php';
 
-$db = new PDO($dbdsn, $dbuser, $dbpass);
-$log = new Logger();
-
-$uf = new Feed_UpdateFeeds();
-$uf->db = $db;
-$uf->log = $log;
-$uf->updateAll();
-
-$uf = new Feed_UpdateEntries();
-$uf->db = $db;
-$uf->log = $log;
-$uf->updateAll();
-
-$uf = new Feed_PingUrls();
-$uf->db = $db;
-$uf->log = $log;
-$uf->pingAll();
-
+$cli = new Cli();
+$cli->run();
 ?>
