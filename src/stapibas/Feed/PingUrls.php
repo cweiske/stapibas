@@ -61,7 +61,8 @@ class Feed_PingUrls
 
         $this->log->info('Pinging %d URLs..', count($options));
         $res = $this->db->query(
-            'SELECT fe_url, feu_id, feu_url FROM feedentries, feedentryurls'
+            'SELECT fe_url, feu_id, feu_url, feu_tries'
+            . ' FROM feedentries, feedentryurls'
             . ' WHERE fe_id = feu_fe_id'
             . $this->sqlNeedsUpdate()
             . ' AND (' . implode(' OR ', $options) . ')'
@@ -116,14 +117,17 @@ class Feed_PingUrls
             );
         } else {
             //error
-            $this->log->err('Error: ' . $res->getCode() . ': ' . $res->getMessage());
+            $code = $res->getCode();
+            $this->log->err('Error: ' . $code . ': ' . $res->getMessage());
             $httpRes = $res->getResponse();
             if ($httpRes) {
                 $this->log->info(
                     'Pingback response: Status code ' . $httpRes->getStatus()
                     . ', headers: ' . print_r($httpRes->getHeader(), true)
                 );
-                //. ', body: ' .$httpRes->getBody()
+                if ($code == 100 || $code == 101 || $code == -32600) {
+                    $this->log->info('HTTP body: ' . $httpRes->getBody());
+                }
             }
             $this->db->exec(
                 'UPDATE feedentryurls SET'
