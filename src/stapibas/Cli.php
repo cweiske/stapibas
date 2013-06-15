@@ -124,6 +124,10 @@ class Cli
     protected function runPingbackHandler(
         \Console_CommandLine_Result $command, Dependencies $deps
     ) {
+        //fetch content of pingback source pages
+        $cf = new Pingback_ContentFetcher($deps);
+        $cf->updateAll();
+
         //FIXME
     }
 
