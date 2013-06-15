@@ -38,6 +38,17 @@ CREATE TABLE `feeds` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
 
 
+CREATE TABLE `pingbackcontent` (
+  `pc_id` int(11) NOT NULL AUTO_INCREMENT,
+  `pc_p_id` int(11) NOT NULL,
+  `pc_mime_type` varchar(32) NOT NULL,
+  `pc_fulltext` text NOT NULL,
+  `pc_detected_type` varchar(16) NOT NULL,
+  PRIMARY KEY (`pc_id`),
+  UNIQUE KEY `pc_id` (`pc_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
 CREATE TABLE `pingbacks` (
   `p_id` int(11) NOT NULL AUTO_INCREMENT,
   `p_source` varchar(1024) CHARACTER SET latin1 NOT NULL,
@@ -60,5 +71,48 @@ CREATE TABLE `pingbacktargets` (
   PRIMARY KEY (`pt_id`),
   UNIQUE KEY `pt_id` (`pt_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='List of pages that may receive pingbacks';
+
+
+CREATE TABLE `rbookmarks` (
+  `rb_id` int(11) NOT NULL AUTO_INCREMENT,
+  `rb_pc_id` int(11) NOT NULL,
+  `rb_target` varchar(2048) NOT NULL,
+  `rb_source` varchar(2048) NOT NULL,
+  `rb_source_title` varchar(256) NOT NULL,
+  `rb_count` int(11) NOT NULL,
+  PRIMARY KEY (`rb_id`),
+  UNIQUE KEY `rb_id` (`rb_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Bookmarks, extracted from pingbackcontent';
+
+
+CREATE TABLE `rcomments` (
+  `rc_id` int(11) NOT NULL AUTO_INCREMENT,
+  `rc_pc_id` int(11) NOT NULL,
+  `rc_target` varchar(2048) NOT NULL,
+  `rc_source` varchar(2048) NOT NULL,
+  `rc_title` varchar(256) NOT NULL,
+  `rc_updated` datetime NOT NULL,
+  `rc_author_name` varchar(32) NOT NULL,
+  `rc_author_url` varchar(2048) NOT NULL,
+  `rc_author_image` varchar(2048) NOT NULL,
+  `rc_content` text NOT NULL,
+  PRIMARY KEY (`rc_id`),
+  UNIQUE KEY `rb_id` (`rc_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Bookmarks, extracted from pingbackcontent';
+
+
+CREATE TABLE `rlinks` (
+  `rl_id` int(11) NOT NULL AUTO_INCREMENT,
+  `rl_pc_id` int(11) NOT NULL,
+  `rl_target` varchar(2048) NOT NULL,
+  `rl_source` varchar(2048) NOT NULL,
+  `rl_title` varchar(256) NOT NULL,
+  `rl_updated` datetime NOT NULL,
+  `rl_author_name` varchar(32) NOT NULL,
+  `rl_author_url` varchar(2048) NOT NULL,
+  `rl_author_image` varchar(2048) NOT NULL,
+  PRIMARY KEY (`rl_id`),
+  UNIQUE KEY `rb_id` (`rl_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Bookmarks, extracted from pingbackcontent';
 
 
