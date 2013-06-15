@@ -118,7 +118,7 @@ class Cli
             array(
                 'short_name'  => '-t',
                 'long_name'   => '--tasks',
-                'description' => 'Execute the given tasks (comma-separated)',
+                'description' => 'Execute the given tasks (comma-separated: feeds,entries,urls)',
                 'help_name'   => 'tasks',
                 'action'      => 'StoreString',
                 'default'     => 'feeds,entries,urls',

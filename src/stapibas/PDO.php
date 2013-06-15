@@ -17,6 +17,16 @@ class PDO extends \PDO
         $this->handleError();
     }
 
+    public function exec($statement)
+    {
+        $res = parent::exec($statement);
+        if ($res !== false) {
+            return $res;
+        }
+
+        $this->handleError();
+    }
+
     protected function handleError()
     {
         echo "SQL error\n";

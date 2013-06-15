@@ -33,7 +33,8 @@ class Feed_PingUrls
     {
         $this->log->info('Pinging all URLs..');
         $res = $this->db->query(
-            'SELECT fe_url, feu_id, feu_url FROM feedentries, feedentryurls'
+            'SELECT fe_url, feu_id, feu_url, feu_tries'
+            . ' FROM feedentries, feedentryurls'
             . ' WHERE fe_id = feu_fe_id' . $this->sqlNeedsUpdate()
         );
         $items = 0;
@@ -89,7 +90,11 @@ class Feed_PingUrls
                 'UPDATE feedentryurls SET'
                 . '  feu_pinged = 1'
                 . ', feu_updated = NOW()'
-                . ', feu_error = ' . $this->db->quote($e->getMessage())
+                . ', feu_error = 1'
+                . ', feu_error_code = ' . $this->db->quote($e->getCode())
+                . ', feu_error_message = ' . $this->db->quote($e->getMessage())
+                . ', feu_tries = ' . $this->db->quote($row->feu_tries + 1)
+                . ', feu_retry = ' . $this->sqlRetry($e)
                 . ' WHERE feu_id = ' . $this->db->quote($row->feu_id)
             );
             return;
@@ -102,7 +107,11 @@ class Feed_PingUrls
                 'UPDATE feedentryurls SET'
                 . '  feu_pinged = 1'
                 . ', feu_updated = NOW()'
-                . ', feu_error = ""'
+                . ', feu_error = 0'
+                . ', feu_error_code = ""'
+                . ', feu_error_message = ""'
+                . ', feu_tries = ' . $this->db->quote($row->feu_tries + 1)
+                . ', feu_retry = 0'
                 . ' WHERE feu_id = ' . $this->db->quote($row->feu_id)
             );
         } else {
@@ -113,15 +122,18 @@ class Feed_PingUrls
                 $this->log->info(
                     'Pingback response: Status code ' . $httpRes->getStatus()
                     . ', headers: ' . print_r($httpRes->getHeader(), true)
-                    . ', body: ' . $httpRes->getBody()
                 );
+                //. ', body: ' .$httpRes->getBody()
             }
             $this->db->exec(
                 'UPDATE feedentryurls SET'
                 . '  feu_pinged = 1'
                 . ', feu_updated = NOW()'
-                . ', feu_error = '
-                . $this->db->quote($res->getCode() . ': ' . $res->getMessage())
+                . ', feu_error = 1'
+                . ', feu_error_code = ' . $this->db->quote($res->getCode())
+                . ', feu_error_message = ' . $this->db->quote($res->getMessage())
+                . ', feu_tries = ' . $this->db->quote($row->feu_tries + 1)
+                . ', feu_retry = ' . $this->sqlRetry($res)
                 . ' WHERE feu_id = ' . $this->db->quote($row->feu_id)
             );
         }
@@ -132,7 +144,35 @@ class Feed_PingUrls
         if ($this->deps->options['force']) {
             return '';
         }
-        return '  AND feu_active = 1 AND feu_pinged = 0';
+        $sqlRetry = '(feu_retry = 1 AND feu_tries < 5)';
+        //FIXME: wait at least 1 hour before retrying
+
+        return ' AND feu_active = 1 AND (feu_pinged = 0 OR ' . $sqlRetry . ')';
+    }
+
+    /**
+     * Determines if it should be retried to pingback the URL after some time
+     *
+     * @param $obj mixed Exception or Pingback response
+     */
+    protected function sqlRetry($obj)
+    {
+        if ($obj instanceof \Exception) {
+            return '1';
+        }
+
+        switch ($obj->getCode()) {
+        case -32601:  //they have xmp-rpc, but do not support pingback
+        case 17:  //they think we don't link to them
+        case 18:  //they think we send out pingback spam
+        case 48:  //already registered
+        case 49:  //access denied
+        case 200: //pingback not supported
+        case 201: //Unvalid target URI
+            return '0';
+        }
+
+        return '1';
     }
 }
 ?>
