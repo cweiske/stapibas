@@ -1,6 +1,5 @@
 
 
-DROP TABLE IF EXISTS `feedentries`;
 CREATE TABLE `feedentries` (
   `fe_id` int(11) NOT NULL AUTO_INCREMENT,
   `fe_f_id` int(11) NOT NULL,
@@ -12,7 +11,6 @@ CREATE TABLE `feedentries` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
 
 
-DROP TABLE IF EXISTS `feedentryurls`;
 CREATE TABLE `feedentryurls` (
   `feu_id` int(11) NOT NULL AUTO_INCREMENT,
   `feu_fe_id` int(11) NOT NULL,
@@ -30,7 +28,6 @@ CREATE TABLE `feedentryurls` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
 
 
-DROP TABLE IF EXISTS `feeds`;
 CREATE TABLE `feeds` (
   `f_id` int(11) NOT NULL AUTO_INCREMENT,
   `f_url` varchar(2048) CHARACTER SET utf8 NOT NULL,
@@ -41,7 +38,6 @@ CREATE TABLE `feeds` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
 
 
-DROP TABLE IF EXISTS `pingbacks`;
 CREATE TABLE `pingbacks` (
   `p_id` int(11) NOT NULL AUTO_INCREMENT,
   `p_source` varchar(1024) CHARACTER SET latin1 NOT NULL,
@@ -50,8 +46,19 @@ CREATE TABLE `pingbacks` (
   `p_client_ip` varchar(40) CHARACTER SET latin1 NOT NULL,
   `p_client_agent` varchar(128) CHARACTER SET latin1 NOT NULL,
   `p_client_referer` varchar(1024) CHARACTER SET latin1 NOT NULL,
+  `p_needs_review` tinyint(1) NOT NULL,
+  `p_use` tinyint(1) NOT NULL,
+  `p_needs_update` tinyint(1) NOT NULL,
   PRIMARY KEY (`p_id`),
   UNIQUE KEY `p_id` (`p_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `pingbacktargets` (
+  `pt_id` int(11) NOT NULL AUTO_INCREMENT,
+  `pt_url` varchar(2048) NOT NULL,
+  PRIMARY KEY (`pt_id`),
+  UNIQUE KEY `pt_id` (`pt_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='List of pages that may receive pingbacks';
 
 

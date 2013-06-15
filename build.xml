@@ -2,6 +2,6 @@
 <project name="stapibas" default="dist">
 
  <target name="dump-db" description="Update data/tables.sql">
-  <exec command="mysqldump --no-data --skip-set-charset -ustapibas -pstapibas stapibas|grep -v '/*!40' |grep -v '^--' |sed 's/AUTO_INCREMENT=[0-9]*//' > data/tables.sql" />
+  <exec command="mysqldump --no-data --skip-add-drop-table --skip-set-charset -ustapibas -pstapibas stapibas|grep -v '/*!40' |grep -v '^--' |sed 's/AUTO_INCREMENT=[0-9]*//' > data/tables.sql" />
  </target>
 </project>

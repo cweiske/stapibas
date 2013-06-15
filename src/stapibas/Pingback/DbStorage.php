@@ -3,11 +3,38 @@ namespace stapibas;
 
 class Pingback_DbStorage
     implements \PEAR2\Services\Pingback\Server\Callback\IStorage,
-    \PEAR2\Services\Pingback\Server\Callback\ILink
+    \PEAR2\Services\Pingback\Server\Callback\ILink,
+    \PEAR2\Services\Pingback\Server\Callback\ITarget
 {
     public function __construct(PDO $db)
     {
         $this->db = $db;
+    }
+
+    /**
+     * Verifies that the given target URI exists in our system.
+     *
+     * @param string $target Target URI that got linked to
+     *
+     * @return boolean True if the target URI exists, false if not
+     *
+     * @throws Exception When something fatally fails
+     */
+    public function verifyTargetExists($target)
+    {
+        $res = $this->db->query(
+            'SELECT COUNT(*) as count FROM pingbacktargets'
+            . ' WHERE ' . $this->db->quote($target) . ' LIKE pt_url'
+        );
+        $answer = $res->fetch(\PDO::FETCH_OBJ);
+        if ($answer->count == 0) {
+            throw new \Exception(
+                'The specified target URI cannot be used as a target.',
+                33
+            );
+        }
+
+        return true;
     }
 
     public function storePingback(
