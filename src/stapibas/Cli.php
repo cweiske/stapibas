@@ -29,18 +29,12 @@ class Cli
                 $GLOBALS['dbdsn'], $GLOBALS['dbuser'], $GLOBALS['dbpass']
             );
             $deps->log = $log;
-            $deps->options = $result->options;
+            $deps->options = array_merge(
+                $result->options, $result->command->options
+            );
 
-            $tasks = array_flip(explode(',', $result->options['tasks']));
-
-            if (isset($tasks['feeds'])) {
-                $this->runUpdateFeeds($deps);
-            }
-            if (isset($tasks['entries'])) {
-                $this->runUpdateEntries($deps);
-            }
-            if (isset($tasks['urls'])) {
-                $this->runPingUrls($deps);
+            if ($result->command_name == 'update') {
+                $this->runUpdate($result, $deps);
             }
         } catch (\Exception $e) {
             $msg = 'stapibas exception!' . "\n"
@@ -48,6 +42,21 @@ class Cli
                 . 'Message: ' . $e->getMessage() . "\n";
             file_put_contents('php://stderr', $msg);
             exit(1);
+        }
+    }
+
+    protected function runUpdate($result, $deps)
+    {
+        $tasks = array_flip(explode(',', $result->command->options['tasks']));
+
+        if (isset($tasks['feeds'])) {
+            $this->runUpdateFeeds($deps);
+        }
+        if (isset($tasks['entries'])) {
+            $this->runUpdateEntries($deps);
+        }
+        if (isset($tasks['urls'])) {
+            $this->runUpdatePingUrls($deps);
         }
     }
 
@@ -73,7 +82,7 @@ class Cli
         }
     }
 
-    protected function runPingUrls($deps)
+    protected function runUpdatePingUrls($deps)
     {
         $uf = new Feed_PingUrls($deps);
         if ($deps->options['entryurl'] === null) {
@@ -92,61 +101,6 @@ class Cli
         $p->version = '0.0.1';
 
         $p->addOption(
-            'feed',
-            array(
-                'short_name'  => '-i',
-                'long_name'   => '--feed',
-                'description' => 'Update this feed URL or ID',
-                'help_name'   => 'URL|ID',
-                'action'      => 'StoreString'
-            )
-        );
-
-        $p->addOption(
-            'entry',
-            array(
-                'short_name'  => '-e',
-                'long_name'   => '--entry',
-                'description' => 'Update this feed entry URL or ID',
-                'help_name'   => 'URL|ID',
-                'action'      => 'StoreString'
-            )
-        );
-
-        $p->addOption(
-            'tasks',
-            array(
-                'short_name'  => '-t',
-                'long_name'   => '--tasks',
-                'description' => 'Execute the given tasks (comma-separated: feeds,entries,urls)',
-                'help_name'   => 'tasks',
-                'action'      => 'StoreString',
-                'default'     => 'feeds,entries,urls',
-            )
-        );
-        $p->addOption(
-            'list_tasks',
-            array(
-                'long_name'   => '--list-tasks',
-                'description' => 'Show all possible tasks',
-                'action'      => 'List',
-                'list'        => array('feeds', 'entries', 'urls')
-            )
-        );
-
-        $p->addOption(
-            'entryurl',
-            array(
-                'short_name'  => '-u',
-                'long_name'   => '--url',
-                'description' => 'Ping this URL or ID',
-                'help_name'   => 'URL|ID',
-                'action'      => 'StoreString'
-            )
-        );
-
-
-        $p->addOption(
             'debug',
             array(
                 'short_name'  => '-d',
@@ -162,6 +116,68 @@ class Cli
                 'long_name'   => '--force',
                 'description' => "Update even when resource did not change",
                 'action'      => 'StoreTrue'
+            )
+        );
+
+
+        $update = $p->addCommand(
+            'update',
+            array(
+                'description' => 'Update feed data and send out pings'
+            )
+        );
+
+        $update->addOption(
+            'feed',
+            array(
+                'short_name'  => '-i',
+                'long_name'   => '--feed',
+                'description' => 'Update this feed URL or ID',
+                'help_name'   => 'URL|ID',
+                'action'      => 'StoreString'
+            )
+        );
+
+        $update->addOption(
+            'entry',
+            array(
+                'short_name'  => '-e',
+                'long_name'   => '--entry',
+                'description' => 'Update this feed entry URL or ID',
+                'help_name'   => 'URL|ID',
+                'action'      => 'StoreString'
+            )
+        );
+
+        $update->addOption(
+            'tasks',
+            array(
+                'short_name'  => '-t',
+                'long_name'   => '--tasks',
+                'description' => 'Execute the given tasks (comma-separated: feeds,entries,urls)',
+                'help_name'   => 'tasks',
+                'action'      => 'StoreString',
+                'default'     => 'feeds,entries,urls',
+            )
+        );
+        $update->addOption(
+            'list_tasks',
+            array(
+                'long_name'   => '--list-tasks',
+                'description' => 'Show all possible tasks',
+                'action'      => 'List',
+                'list'        => array('feeds', 'entries', 'urls')
+            )
+        );
+
+        $update->addOption(
+            'entryurl',
+            array(
+                'short_name'  => '-u',
+                'long_name'   => '--url',
+                'description' => 'Ping this URL or ID',
+                'help_name'   => 'URL|ID',
+                'action'      => 'StoreString'
             )
         );
 
