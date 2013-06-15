@@ -30,11 +30,14 @@ class Cli
             );
             $deps->log = $log;
             $deps->options = array_merge(
-                $result->options, $result->command->options
+                $result->options,
+                $result->command ? $result->command->options : array()
             );
 
             if ($result->command_name == 'update') {
                 $this->runUpdate($result, $deps);
+            } else if ($result->command_name == 'feed') {
+                $this->manageFeed($result, $deps);
             }
         } catch (\Exception $e) {
             $msg = 'stapibas exception!' . "\n"
@@ -45,8 +48,9 @@ class Cli
         }
     }
 
-    protected function runUpdate($result, $deps)
-    {
+    protected function runUpdate(
+        \Console_CommandLine_Result $result, Dependencies $deps
+    ) {
         $tasks = array_flip(explode(',', $result->command->options['tasks']));
 
         if (isset($tasks['feeds'])) {
@@ -94,6 +98,20 @@ class Cli
     }
 
 
+    protected function manageFeed(
+        \Console_CommandLine_Result $result, Dependencies $deps
+    ) {
+        $mg = new Feed_Manage($deps);
+        if ($deps->options['add']) {
+            $mg->addFeed($result->command->args['feed']);
+        } else if ($deps->options['remove']) {
+            $mg->removeFeed($result->command->args['feed']);
+        } else {
+            $mg->listAll();
+        }
+    }
+
+
     public function setupCli()
     {
         $p = new \Console_CommandLine();
@@ -119,6 +137,38 @@ class Cli
             )
         );
 
+        $feed = $p->addCommand(
+            'feed',
+            array(
+                'description' => 'Edit, list or delete feeds'
+            )
+        );
+        $feed->addOption(
+            'add',
+            array(
+                'short_name'  => '-a',
+                'long_name'   => '--add',
+                'description' => 'Add the feed',
+                'action'      => 'StoreTrue'
+            )
+        );
+        $feed->addOption(
+            'remove',
+            array(
+                'short_name'  => '-r',
+                'long_name'   => '--remove',
+                'description' => 'Remove the feed',
+                'action'      => 'StoreTrue'
+            )
+        );
+        $feed->addArgument(
+            'feed',
+            array(
+                'description' => 'URL or ID of feed',
+                'optional' => true
+            )
+        );
+        
 
         $update = $p->addCommand(
             'update',
