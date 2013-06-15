@@ -31,13 +31,18 @@ class Cli
             $deps->log = $log;
             $deps->options = array_merge(
                 $result->options,
-                $result->command ? $result->command->options : array()
+                $result->command ? $result->command->options : array(),
+                ($result->command && $result->command->command)
+                    ? $result->command->command->options
+                    : array()
             );
 
-            if ($result->command_name == 'update') {
-                $this->runUpdate($result, $deps);
-            } else if ($result->command_name == 'feed') {
-                $this->manageFeed($result, $deps);
+            if ($result->command_name == 'feed') {
+                $this->runFeed($result->command, $deps);
+            } else if ($result->command_name == 'handle') {
+                $this->runPingbackHandler($result->command, $deps);
+            } else {
+                $this->cliParser->displayUsage(1);
             }
         } catch (\Exception $e) {
             $msg = 'stapibas exception!' . "\n"
@@ -48,23 +53,41 @@ class Cli
         }
     }
 
-    protected function runUpdate(
+    protected function runFeed(
+        \Console_CommandLine_Result $command, Dependencies $deps
+    ) {
+        if ($command->command_name == 'update') {
+            return $this->runFeedUpdate($command, $deps);
+        }
+
+        $mg = new Feed_Manage($deps);
+        if ($command->command_name == 'add') {
+            $mg->addFeed($command->command->args['feed']);
+        } else if ($command->command_name ==  'remove') {
+            $mg->removeFeed($command->command->args['feed']);
+        } else {
+            $mg->listAll();
+        }
+    }
+
+    protected function runFeedUpdate(
         \Console_CommandLine_Result $result, Dependencies $deps
     ) {
         $tasks = array_flip(explode(',', $result->command->options['tasks']));
 
         if (isset($tasks['feeds'])) {
-            $this->runUpdateFeeds($deps);
+            $this->runFeedUpdateFeeds($deps);
         }
         if (isset($tasks['entries'])) {
-            $this->runUpdateEntries($deps);
+            $this->runFeedUpdateEntries($deps);
         }
         if (isset($tasks['urls'])) {
-            $this->runUpdatePingUrls($deps);
+            $this->runFeedUpdatePingUrls($deps);
         }
     }
 
-    protected function runUpdateFeeds($deps)
+
+    protected function runFeedUpdateFeeds($deps)
     {
         $uf = new Feed_UpdateFeeds($deps);
         if ($deps->options['feed'] === null) {
@@ -75,7 +98,7 @@ class Cli
         }
     }
 
-    protected function runUpdateEntries($deps)
+    protected function runFeedUpdateEntries($deps)
     {
         $ue = new Feed_UpdateEntries($deps);
         if ($deps->options['entry'] === null) {
@@ -86,7 +109,7 @@ class Cli
         }
     }
 
-    protected function runUpdatePingUrls($deps)
+    protected function runFeedUpdatePingUrls($deps)
     {
         $uf = new Feed_PingUrls($deps);
         if ($deps->options['entryurl'] === null) {
@@ -98,17 +121,10 @@ class Cli
     }
 
 
-    protected function manageFeed(
-        \Console_CommandLine_Result $result, Dependencies $deps
+    protected function runPingbackHandler(
+        \Console_CommandLine_Result $command, Dependencies $deps
     ) {
-        $mg = new Feed_Manage($deps);
-        if ($deps->options['add']) {
-            $mg->addFeed($result->command->args['feed']);
-        } else if ($deps->options['remove']) {
-            $mg->removeFeed($result->command->args['feed']);
-        } else {
-            $mg->listAll();
-        }
+        //FIXME
     }
 
 
@@ -137,46 +153,44 @@ class Cli
             )
         );
 
+        $this->setupCliFeed($p);
+        $this->setupCliPingback($p);
+
+        $this->cliParser = $p;
+    }
+
+    protected function setupCliFeed($p)
+    {
         $feed = $p->addCommand(
             'feed',
             array(
                 'description' => 'Edit, list or delete feeds'
             )
         );
-        $feed->addOption(
+
+        $add = $feed->addCommand(
             'add',
             array(
-                'short_name'  => '-a',
-                'long_name'   => '--add',
                 'description' => 'Add the feed',
-                'action'      => 'StoreTrue'
             )
         );
-        $feed->addOption(
+        $add->addArgument('feed', array('description' => 'URL of feed'));
+
+        $remove = $feed->addCommand(
             'remove',
             array(
-                'short_name'  => '-r',
-                'long_name'   => '--remove',
                 'description' => 'Remove the feed',
-                'action'      => 'StoreTrue'
             )
         );
-        $feed->addArgument(
-            'feed',
-            array(
-                'description' => 'URL or ID of feed',
-                'optional' => true
-            )
-        );
+        $remove->addArgument('feed', array('description' => 'URL or ID of feed'));
         
 
-        $update = $p->addCommand(
+        $update = $feed->addCommand(
             'update',
             array(
                 'description' => 'Update feed data and send out pings'
             )
         );
-
         $update->addOption(
             'feed',
             array(
@@ -187,7 +201,6 @@ class Cli
                 'action'      => 'StoreString'
             )
         );
-
         $update->addOption(
             'entry',
             array(
@@ -198,7 +211,6 @@ class Cli
                 'action'      => 'StoreString'
             )
         );
-
         $update->addOption(
             'tasks',
             array(
@@ -213,13 +225,14 @@ class Cli
         $update->addOption(
             'list_tasks',
             array(
-                'long_name'   => '--list-tasks',
-                'description' => 'Show all possible tasks',
-                'action'      => 'List',
-                'list'        => array('feeds', 'entries', 'urls')
+                'long_name'     => '--list-tasks',
+                'description'   => 'Show all possible tasks',
+                'action'        => 'List',
+                'action_params' => array(
+                    'list' => array('feeds', 'entries', 'urls')
+                )
             )
         );
-
         $update->addOption(
             'entryurl',
             array(
@@ -230,9 +243,16 @@ class Cli
                 'action'      => 'StoreString'
             )
         );
-
-        $this->cliParser = $p;
     }
 
+    protected function setupCliPingback($p)
+    {
+        $handle = $p->addCommand(
+            'handle',
+            array(
+                'description' => 'Handle pingbacks: Fetch content, extract data'
+            )
+        );
+    }
 }
 ?>
