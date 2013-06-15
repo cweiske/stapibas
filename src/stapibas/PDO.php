@@ -32,6 +32,7 @@ class PDO extends \PDO
         echo "SQL error\n";
         echo " " . $this->errorCode() . "\n";
         echo " " . implode(' - ', $this->errorInfo()) . "\n";
+        exit(2);
     }
 }
 
