@@ -1,7 +1,7 @@
 <?php
 namespace stapibas;
 
-class Pingback_ContentFetcher
+class Content_Fetcher
 {
     public $db;
     public $log;

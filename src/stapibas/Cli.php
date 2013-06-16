@@ -125,7 +125,7 @@ class Cli
         \Console_CommandLine_Result $command, Dependencies $deps
     ) {
         //fetch content of pingback source pages
-        $cf = new Pingback_ContentFetcher($deps);
+        $cf = new Content_Fetcher($deps);
         $cf->updateAll();
 
         //FIXME
