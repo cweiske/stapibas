@@ -1,0 +1,945 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>	
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" >
+<meta name="keywords" content="indieweb" >	<base href="http://eschnou.com/" />	
+	<title>Laurent Eschenauer | Testing #indieweb federation with @waterpigs.co.uk</title>	<link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico" />
+	<link rel="pingback" href="http://eschnou.com/pingback">		
+	<link href="style/toolbar.css" media="screen" rel="stylesheet" type="text/css" >
+<link href="themes/stumblepeach/style.css" media="screen" rel="stylesheet" type="text/css" >
+<link href="style/lightbox.css" media="screen" rel="stylesheet" type="text/css" >	
+		
+	<link rel="openid.server" href="http://www.myopenid.com/server" />
+<link rel="openid.delegate" href="http://eschnou.myopenid.com/" />
+<link rel="openid2.local_id" href="http://eschnou.myopenid.com" />
+<link rel="openid2.provider" href="http://www.myopenid.com/server" />
+<meta http-equiv="X-XRDS-Location" content="http://www.myopenid.com/xrds?username=eschnou.myopenid.com" />	
+		
+   		
+      <style>
+   		#page {
+  width: 860px;
+}
+
+#right_column {
+  width: 240px;
+}
+
+#header h1 {
+  width:400px;
+}
+
+div.widget{
+  font-size: 0.9em;
+}
+
+.widget #formSearch input#searchsubmit {
+  width:75px;
+}
+
+img.addthis {
+ display: none;
+}
+
+div.tabMenu  {
+ font-size:14px;
+}
+
+#search {
+  border: 2px solid #DCE4EC;
+  color: #34495E;
+  font-family: "Lato", sans-serif;
+  font-size: 14px;
+  padding: 2px 0 4px 10px;
+  text-indent: 1px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  width: 135px !important;
+}
+
+#searchsubmit {
+  border-radius: 6px;
+  background-color: #3498DB;
+  text-transform: lowercase;
+  border: none;
+  padding: 5px 10px;
+  color: white;
+  font: 14px/1.231 "Lato", sans-serif;
+  cursor: pointer;
+}
+
+#searchsubmit:hover {
+  background-color: #5DADE2;
+}   </style>
+   	<style>
+			</style>
+</head>
+	
+<body>
+
+<div id="adminbar" style="display:none;">
+	<div id="logo">
+			<a href='http://storytlr.net/admin/post/'><img src="images/admin-logo.gif" title="To the administration environment"/></a>
+	</div>
+	<div id="login">
+	<form id="formLogin" enctype="application/x-www-form-urlencoded" action="http://storytlr.net/admin/auth/login" method="post">
+	Username: <input id="username" name="username" size="17" maxlength="16" tabindex="101" /> 
+	Password: <input id="password" name="password" size="17" maxlength="16" type="password" tabindex="102" />
+	<input type="checkbox" id="remember" name="remember" class="remember" /> Remember me 
+	<input type="hidden" name="target" value="user_page" id="target" />
+	<input type="submit" name="login" id="login" value="Sign in" />
+	</form>
+	</div>
+</div>
+
+<div id="pagewrapper">
+	<div class="" id="page">
+	
+	<div class='overlay_frame_wrapper' id='overlay_frame_wrapper' style="display:none;">
+		<div class='overlay_frame_content'>
+			<iframe id='overlay_frame' width=400 height=400></iframe>
+		</div>
+	</div>
+		
+	<div id="header-wrapper">
+		<div id="header">
+						<div id="login">
+				<div>
+					<a href="javascript://" onclick="onLoginClick(); return false;" title="Owner login">
+						<img src="images/33.png" />
+					</a>
+				</div>
+			</div>
+						<div class="titlewrapper">
+				<h1 class="title">
+				Laurent Eschenauer				</h1>
+			</div>
+			<div class="descriptionwrapper">
+				<div class="description"></div>
+			</div>
+		</div>
+	</div>
+		
+	<div id="content-wrapper">
+		 
+		<div id="right_column">
+			<div class='sidebar'>
+			<div class="widget custom">
+	<h2 class="title"></h2>
+	<div class="widget-content">
+		<input type="button" onclick="(function(){var z=document.createElement('script');z.src='https://www.subtome.com/load.js';document.body.appendChild(z);})()" value="Subscribe to my Stream" style="margin: 0px 0px 5px 40px;">		<br class='fix'/>
+	</div>
+	<div class="clear"></div>
+</div>
+<div class="widget search">
+	<h2 class="title">Search</h2>
+	<div class="widget-content">
+		<form id="formSearch" name="formSearch" action="search/" method="post">
+			<input id="search" name="search" maxlength="256" tabindex="1" value="">
+			<input id="searchsubmit" value="SEARCH" type="submit">
+			<br class="fix" />
+		</form>
+	</div>
+</div>
+<div class="widget bio">
+	<h2 class="title">About eschnou</h2>
+	<div class="widget-content">
+		<div id="profile" class="vcard h-card">
+			<div id="avatar">
+								<img src="http://eschnou.com/thumbnail/83mY3tVWgoSt7QGfe6f4COJ1hziC4PWF" alt="eschnou" class="photo u-photo" width="72" height="72" />
+								<div id="name" class="fn p-name"><a href="http://eschnou.com" class="u-url"><span class="given-name p-given-name">Laurent</span> <span class="family-name p-family-name">Eschenauer</span></a></div>
+				<div id="location" class="adr p-adr">Liège, Belgium</div>
+			</div>
+			<div id="details">
+				<div id="bio"><p class="p-note">Entrepreneur. Software engineer. Building the future of cloud @comodit.  Passionate about the Open Web. Developer of http://storytlr.org, an open source lifestreaming/blogging platform federating with the #indieweb.</p></div>
+			</div>
+			<br class="fix" />
+		</div>
+	</div>
+</div>
+<div class="widget custom">
+	<h2 class="title">Contact</h2>
+	<div class="widget-content">
+		<b>Email: </b>laurent@eschenauer.be
+<b>Voicemail: </b>  +1 (415) 894-0312
+		<br class='fix'/>
+	</div>
+	<div class="clear"></div>
+</div>
+<div class="widget custom">
+	<h2 class="title">Bitcoin TipJar</h2>
+	<div class="widget-content">
+		<a href="bitcoin:13q2eVG8KkmsFqGHqDWbjHeq3qicxi4rjh?label=eschnou.com" rel="me">
+<img src="http://files.eschnou.com/eschnou-btc.png" alt="Send me a BTC payment" title="Send me a BTC payment" style="max-width:150px;">
+</a>		<br class='fix'/>
+	</div>
+	<div class="clear"></div>
+</div>
+<div class="widget music">
+	<h2 class="title">My playlist</h2>
+	<div class="widget-content">
+		<div id="profile">
+				<object height="200" width="200" data="flash/player_mp3_multi.swf" type="application/x-shockwave-flash">
+				     <param value="flash/player_mp3_multi.swf" name="movie"/>
+				     <param value="transparent" name="wmode"/>
+				     <param name="FlashVars" value="playlistrss=http://eschnou.com/rss/types/audio/nopre/1/feed.xml&currentmp3color=a3c6fa&showvolume=1&buttonovercolor=eeeeee&height=200&width=200&sliderovercolor=EEEEEE&loadingcolor=a3c6fa" />
+				</object>
+			<br class="fix" />
+		</div>
+	</div>
+</div>
+<div class="widget tags">
+	<h2 class="title">Tag cloud</h2>
+	<div class="widget-content">
+		<a href='tag/indieweb' style='font-size: 75%'>#indieweb</a> <a href='tag/SoundCloud' style='font-size: 78%'>SoundCloud</a> <a href='tag/ardrone' style='font-size: 71%'>ardrone</a> <a href='tag/betagroup' style='font-size: 77%'>betagroup</a> <a href='tag/comoditdemos' style='font-size: 82%'>comodit/demos</a> <a href='tag/eschnouardronewebflight' style='font-size: 94%'>eschnou/ardrone-webflight</a> <a href='tag/eschnounodeardrone' style='font-size: 78%'>eschnou/node-ar-drone</a> <a href='tag/fosdem' style='font-size: 89%'>fosdem</a> <a href='tag/fsw' style='font-size: 72%'>fsw</a> <a href='tag/music' style='font-size: 71%'>music</a> <a href='tag/nature' style='font-size: 71%'>nature</a> <a href='tag/nodecopter' style='font-size: 75%'>nodecopter</a> <a href='tag/onesocialweb' style='font-size: 82%'>onesocialweb</a> <a href='tag/ourthe' style='font-size: 70%'>ourthe</a> <a href='tag/picplz' style='font-size: 71%'>picplz</a> <a href='tag/storytlr' style='font-size: 90%'>storytlr</a> <a href='tag/storytlrcore' style='font-size: 75%'>storytlr/core</a> <a href='tag/storytlrstorytlr' style='font-size: 150%'>storytlr/storytlr</a> <a href='tag/webmission' style='font-size: 95%'>webmission</a> <a href='tag/wiki' style='font-size: 71%'>wiki</a> 	</div>
+	<div class="clear"></div>
+</div>
+<div class="widget comments">
+	<h2 class="title">Latest comments</h2>
+	<div class="widget-content">
+		<ul>
+					<li>
+				<b>cecfrombelgium :</b>
+				<a href="entry/edward-snowden-the-whistleblower-behind-the-nsa-surveillance-revelations-62-24974.html#comment_4776">
+					What would YOU do Eschnou?				</a>
+			</li>
+					<li>
+				<b>parvinder singh :</b>
+				<a href="entry/edward-snowden-the-whistleblower-behind-the-nsa-surveillance-revelations-62-24974.html#comment_4775">
+					Nice				</a>
+			</li>
+					<li>
+				<b>eschnou :</b>
+				<a href="entry/aaronpareckicom-duh-i-actually-never-realized-there-was-hover-text-in-xk-62-24947.html#comment_4772">
+					@waterpigs.co.uk Oops.. I've just lost my geek ...				</a>
+			</li>
+					<li>
+				<b>Felix :</b>
+				<a href="entry/what-the-hell-happened-to-federated-social-networks-62-24936.html#comment_4771">
+					Similar questions have been asked regarding Ide...				</a>
+			</li>
+					<li>
+				<b>eschnou :</b>
+				<a href="entry/ive-ported-copterface-to-the-webflight-environment-lookig-fwd-to-try-this-24948-8866643.html#comment_4770">
+					@aaronparecki.com Thanks! And hurray for the in...				</a>
+			</li>
+				</ul>
+	</div>
+	<div class="clear"></div>
+</div>
+<div class="widget archives">
+	<h2 class="title">Archives</h2>
+	<div class="widget-content">
+		<div id="accordion_archive">
+			<h3 class='accordion_toggle'><b>2013</b></h3><div class='accordion_content'><ul><li><a href='archives/2013/6'>June</a> (159)</li><li><a href='archives/2013/5'>May</a> (305)</li><li><a href='archives/2013/4'>April</a> (166)</li><li><a href='archives/2013/3'>March</a> (91)</li><li><a href='archives/2013/2'>February</a> (73)</li><li><a href='archives/2013/1'>January</a> (166)</li></ul></div><h3 class='accordion_toggle'><b>2012</b></h3><div class='accordion_content'><ul><li><a href='archives/2012/12'>December</a> (28)</li><li><a href='archives/2012/11'>November</a> (2)</li><li><a href='archives/2012/10'>October</a> (13)</li><li><a href='archives/2012/9'>September</a> (59)</li><li><a href='archives/2012/8'>August</a> (49)</li><li><a href='archives/2012/7'>July</a> (73)</li><li><a href='archives/2012/6'>June</a> (53)</li><li><a href='archives/2012/5'>May</a> (22)</li><li><a href='archives/2012/4'>April</a> (36)</li><li><a href='archives/2012/3'>March</a> (41)</li><li><a href='archives/2012/2'>February</a> (77)</li><li><a href='archives/2012/1'>January</a> (33)</li></ul></div><h3 class='accordion_toggle'><b>2011</b></h3><div class='accordion_content'><ul><li><a href='archives/2011/12'>December</a> (56)</li><li><a href='archives/2011/11'>November</a> (10)</li><li><a href='archives/2011/10'>October</a> (39)</li><li><a href='archives/2011/9'>September</a> (11)</li><li><a href='archives/2011/8'>August</a> (28)</li><li><a href='archives/2011/7'>July</a> (41)</li><li><a href='archives/2011/6'>June</a> (76)</li><li><a href='archives/2011/5'>May</a> (66)</li><li><a href='archives/2011/4'>April</a> (64)</li><li><a href='archives/2011/3'>March</a> (147)</li><li><a href='archives/2011/2'>February</a> (96)</li><li><a href='archives/2011/1'>January</a> (84)</li></ul></div><h3 class='accordion_toggle'><b>2010</b></h3><div class='accordion_content'><ul><li><a href='archives/2010/12'>December</a> (87)</li><li><a href='archives/2010/11'>November</a> (67)</li><li><a href='archives/2010/10'>October</a> (57)</li><li><a href='archives/2010/9'>September</a> (67)</li><li><a href='archives/2010/8'>August</a> (57)</li><li><a href='archives/2010/7'>July</a> (31)</li><li><a href='archives/2010/6'>June</a> (30)</li><li><a href='archives/2010/5'>May</a> (44)</li><li><a href='archives/2010/4'>April</a> (1)</li><li><a href='archives/2010/3'>March</a> (2)</li><li><a href='archives/2010/2'>February</a> (59)</li><li><a href='archives/2010/1'>January</a> (40)</li></ul></div><h3 class='accordion_toggle'><b>2009</b></h3><div class='accordion_content'><ul><li><a href='archives/2009/12'>December</a> (76)</li><li><a href='archives/2009/11'>November</a> (18)</li><li><a href='archives/2009/10'>October</a> (31)</li><li><a href='archives/2009/9'>September</a> (31)</li><li><a href='archives/2009/8'>August</a> (25)</li><li><a href='archives/2009/7'>July</a> (113)</li><li><a href='archives/2009/6'>June</a> (167)</li><li><a href='archives/2009/5'>May</a> (289)</li><li><a href='archives/2009/4'>April</a> (155)</li><li><a href='archives/2009/3'>March</a> (220)</li><li><a href='archives/2009/2'>February</a> (254)</li><li><a href='archives/2009/1'>January</a> (174)</li></ul></div><h3 class='accordion_toggle'><b>2008</b></h3><div class='accordion_content'><ul><li><a href='archives/2008/12'>December</a> (131)</li><li><a href='archives/2008/11'>November</a> (99)</li><li><a href='archives/2008/10'>October</a> (99)</li><li><a href='archives/2008/9'>September</a> (40)</li><li><a href='archives/2008/8'>August</a> (56)</li><li><a href='archives/2008/7'>July</a> (50)</li><li><a href='archives/2008/6'>June</a> (98)</li><li><a href='archives/2008/5'>May</a> (115)</li><li><a href='archives/2008/4'>April</a> (85)</li><li><a href='archives/2008/3'>March</a> (88)</li><li><a href='archives/2008/2'>February</a> (47)</li><li><a href='archives/2008/1'>January</a> (143)</li></ul></div><h3 class='accordion_toggle'><b>2007</b></h3><div class='accordion_content'><ul><li><a href='archives/2007/12'>December</a> (47)</li><li><a href='archives/2007/11'>November</a> (111)</li><li><a href='archives/2007/10'>October</a> (37)</li><li><a href='archives/2007/9'>September</a> (1)</li><li><a href='archives/2007/8'>August</a> (6)</li><li><a href='archives/2007/7'>July</a> (5)</li><li><a href='archives/2007/1'>January</a> (15)</li></ul></div><h3 class='accordion_toggle'><b>2005</b></h3><div class='accordion_content'><ul><li><a href='archives/2005/10'>October</a> (50)</li></ul></div><h3 class='accordion_toggle'><b>1970</b></h3><div class='accordion_content'><ul><li><a href='archives/1970/1'>January</a> (1)</li></ul></div>		</div>
+	</div>
+	<div class="clear"></div>
+	
+</div>	
+<div class="widget links">
+	<h2 class="title">Me elsewhere</h2>
+	<div class="widget-content">
+		<ul>
+					<li>
+				<a href="http://www.vimeo.com/eschnou" rel="me">
+					<img src="images/vimeo.png" width='16' height='16' />
+					Vimeo				</a>
+			</li>
+					<li>
+				<a href="http://www.flickr.com/photos/eschnoupix" rel="me">
+					<img src="images/flickr.png" width='16' height='16' />
+					Flickr				</a>
+			</li>
+					<li>
+				<a href="http://www.google.com/reader/shared/user%2F02657119769197882713%2Flabel%2Fonstream" rel="me">
+					<img src="images/googlereader.png" width='16' height='16' />
+					Google Reader				</a>
+			</li>
+					<li>
+				<a href="http://identi.ca/eschnou" rel="me">
+					<img src="images/laconica.png" width='16' height='16' />
+					Identi.ca				</a>
+			</li>
+					<li>
+				<a href="http://picasaweb.google.com/eschnou" rel="me">
+					<img src="images/picasa.png" width='16' height='16' />
+					Picasa				</a>
+			</li>
+					<li>
+				<a href="http://www.qik.com/eschnou" rel="me">
+					<img src="images/qik.png" width='16' height='16' />
+					Qik				</a>
+			</li>
+					<li>
+				<a href="http://www.lastfm.com/user/eschnou" rel="me">
+					<img src="images/lastfm.png" width='16' height='16' />
+					Lastfm				</a>
+			</li>
+					<li>
+				<a href="http://blog.eschnou.com/feeds/posts/default?alt=rss" rel="me">
+					<img src="images/rss.png" width='16' height='16' />
+					My old blog				</a>
+			</li>
+					<li>
+				<a href="http://www.seesmic.com/eschnou" rel="me">
+					<img src="images/seesmic.png" width='16' height='16' />
+					Seesmic				</a>
+			</li>
+					<li>
+				<a href="http://www.youtube.com/eschnou" rel="me">
+					<img src="images/youtube.png" width='16' height='16' />
+					Youtube				</a>
+			</li>
+					<li>
+				<a href="https://twitter.com/eschnou" rel="me">
+					<img src="images/twitter.png" width='16' height='16' />
+					Twitter				</a>
+			</li>
+					<li>
+				<a href="http://eschnou.stumbleupon.com" rel="me">
+					<img src="images/stumble.png" width='16' height='16' />
+					StumbleUpon				</a>
+			</li>
+					<li>
+				<a href="https://github.com/eschnou" rel="me">
+					<img src="images/github.png" width='16' height='16' />
+					Github				</a>
+			</li>
+					<li>
+				<a href="http://www.soundcloud.com/eschnou" rel="me">
+					<img src="images/soundcloud.png" width='16' height='16' />
+					Soundcloud				</a>
+			</li>
+				</ul>
+	</div>
+	<div class="clear"></div>
+</div>
+<div class="widget logo">
+	<h2 class="title">Powered by</h2>
+	<div class="widget-content">
+		<p>
+			<a href="http://storytlr.org"><img src="images/powered.gif"></a>
+		</p>
+	</div>
+	<div class="clear"></div>
+</div>
+			</div>
+		</div>
+			
+		<div id="left-column-wrapper">
+			<div id="left-column">
+								<div class="tabMenu">
+					<table class="tabMenu" cellspacing="0">
+						<tr>
+		
+															<td class="spacer">&nbsp;</td>
+								<td class="inactive" onClick="document.location='home?tab=0';return false;"><a href="home?tab=0" onfocus="this.blur()">Lifestream</a></td>
+															<td class="spacer">&nbsp;</td>
+								<td class="inactive" onClick="document.location='home?tab=1';return false;"><a href="home?tab=1" onfocus="this.blur()">Mentions</a></td>
+															<td class="spacer">&nbsp;</td>
+								<td class="inactive" onClick="document.location='home?tab=2';return false;"><a href="home?tab=2" onfocus="this.blur()">Pictures</a></td>
+															<td class="spacer">&nbsp;</td>
+								<td class="inactive" onClick="document.location='home?tab=3';return false;"><a href="home?tab=3" onfocus="this.blur()">Videos</a></td>
+															<td class="spacer">&nbsp;</td>
+								<td class="inactive" onClick="document.location='home?tab=4';return false;"><a href="home?tab=4" onfocus="this.blur()">Places</a></td>
+															<td class="spacer">&nbsp;</td>
+								<td class="inactive" onClick="document.location='home?tab=5';return false;"><a href="home?tab=5" onfocus="this.blur()">Code</a></td>
+															<td class="spacer">&nbsp;</td>
+								<td class="inactive" onClick="document.location='home?tab=6';return false;"><a href="home?tab=6" onfocus="this.blur()">Stories</a></td>
+															<td class="spacer">&nbsp;</td>
+								<td class="inactive" onClick="document.location='home?tab=7';return false;"><a href="home?tab=7" onfocus="this.blur()">About</a></td>
+																					<td class="last">&nbsp;</td>
+						</tr>
+					</table>
+				</div>
+								
+				<div id="status_messages">
+									</div>
+				
+				<div id="error_messages">
+									</div>		
+		
+				<div class="hfeed" id="content">
+				
+									
+					<div class='date' id='2013Apr19'>April 19, 2013</div>
+<div class='item_wrapper' id='item_wrapper_62_24908'>
+	
+	<div class="hentry h-entry entry  item " id='item_62_24908'>
+		<div class='item_left'>
+			<a href="http://eschnou.com/entry/testing-indieweb-federation-with-waterpigscouk-aaronpareckicom-and--62-24908.html" class="u-url" rel="bookmark">
+				<img class="icon" src="images/stuffpress.png" width='16' height='16' />
+			</a>
+			<abbr class="published dt-published" title="2013-04-19T20:26:16+02:00">
+			<span id='item_time_62_24908' class='time' >
+				20:26			</span>
+			</abbr>
+			<div class="waiter" id='item_wait_62_24908' style='display:none'></div>
+					</div>
+		<div class='item_right'>
+			<div class='item_content'>
+				
+				<div class='item_actions'>
+	
+											
+										<action do="reply" with="http://eschnou.com/entry/testing-indieweb-federation-with-waterpigscouk-aaronpareckicom-and--62-24908.html">
+					  <a class="comment" href='javascript:toggle_add_comment(62, 24908);' class="item_add_comment" title="Add comment"><img src="images/28.png" /></a>
+					</action>
+										
+                                        <!-- AddThis Button BEGIN -->
+                                       <action do="post" with="http://eschnou.com/entry/testing-indieweb-federation-with-waterpigscouk-aaronpareckicom-and--62-24908.html"> 
+					<a class="addthis" href="javascript:onAddthisClick('http://eschnou.com/entry/testing-indieweb-federation-with-waterpigscouk-aaronpareckicom-and--62-24908.html', 'Testing #indieweb federation with @waterpigs.co.uk, @aaronparecki.com and @indiewebcamp.com !');" title="Share and bookmark">
+						<img src="images/addthis.gif" width="16" height="16" border="0" alt="" class="addthis"/>
+					</a>
+                                       </action>
+					<!-- AddThis Button END -->
+				
+				</div>
+				
+				
+
+	
+<div class="storytlr_status">
+	<div  class="title entry-title p-name p-summary e-content">
+		Testing <a href="tag/indieweb">#indieweb</a> federation with <a class="h-card" href="http://waterpigs.co.uk" target="_blank">@<span class="p-name p-nickname">waterpigs.co.uk</span></a>, <a class="h-card" href="http://aaronparecki.com" target="_blank">@<span class="p-name p-nickname">aaronparecki.com</span></a> and <a class="h-card" href="http://indiewebcamp.com" target="_blank">@<span class="p-name p-nickname">indiewebcamp.com</span></a> !	</div>
+	</div>	
+
+											<div class="tags footnote">	
+							Tags: <a href='tag/indieweb' rel="tag">indieweb</a>						</div>
+										
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class='item_comments' id='comments_62_24908'>
+	<div class='comments'>
+<h2>Comments</h2>
+
+<div class='mention' id='mention_7'>
+	<div class='actions'>
+		</div>
+	<div class='avatar'>
+                		<img src='http://aaronparecki.com/images/aaronpk.png' />
+                	</div>
+	<div class='header'>
+		<div class='author'>
+			<a href="http://aaronparecki.com/">Aaron Parecki</a>
+		</div>
+		<div class='when'>
+			<a href="http://aaronparecki.com/replies/2013/04/19/2/indieweb">on 19 Apr 13 at 13:35 CEST</a>
+		</div>
+	</div>
+	<div class='title'>
+		
+ Laurent Eschenauer It worked! Now here's a reply! <a href="tag/indieweb">#indieweb</a>
+      	</div>
+</div>
+<div class='comment' id='comment_4700'>
+	<div class='actions'>
+		</div>
+	<div class='avatar'>
+		<img src='http://www.gravatar.com/avatar/02cd45622e90350cc061aaaa02229195' alt="tantek çelik Gravtar" />
+	</div>
+	<div class='header'>
+		<div class='author'>
+						  <a href="http://tantek.com/" rel="nofollow">tantek çelik</a> 
+				
+		</div>
+		<div class='when'>
+			on 20 Apr 13 at 0:57 CEST		</div>
+	</div>
+	<div class='title'>
+		Laurent, are the REPLIES FROM THE <a href="tag/INDIEWEB">#INDIEWEB</a> displayed automatically, are you manually adding them, or automatically queued and you're just manually approving them?	</div>	
+</div>
+<div class='comment' id='comment_4701'>
+	<div class='actions'>
+		</div>
+	<div class='avatar'>
+		<img src='http://www.gravatar.com/avatar/2a8b9fa5ddd762284645edb176557fc4' alt="laurent eschenauer Gravtar" />
+	</div>
+	<div class='header'>
+		<div class='author'>
+						  <a href="http://eschnou.com" rel="nofollow">laurent eschenauer</a> 
+				
+		</div>
+		<div class='when'>
+			on 20 Apr 13 at 8:15 CEST		</div>
+	</div>
+	<div class='title'>
+		<a class="h-card" href="http://tantek.com" target="_blank">@<span class="p-name p-nickname">tantek.com</span></a> It is automatic, when I receive a pingback I parse the source for mf2 content to find a hcard and hentry. No moderation, but I receive an email when someone comment/mention so I can react/delete if spammy. <br /> <br />Next for me is to also support webmentions, and enable a 'in-reply-to' flow.	</div>	
+</div>
+<div class='mention' id='mention_16'>
+	<div class='actions'>
+		</div>
+	<div class='avatar'>
+                		<img src='http://a0.twimg.com/profile_images/278009807/green_3751_AttractiveW_-_Off_the_Record_sur_Flickr___partage_de_photos___normal.jpg' />
+                	</div>
+	<div class='header'>
+		<div class='author'>
+			<a href="http://twitter.com/xtof_fr">xtof_fr</a>
+		</div>
+		<div class='when'>
+			<a href="http://christopheducamp.com/blog/premier-essai-pour-tenter-de-rejoindre-une-federation-indieweb-chez-eschnou-fra/">on 21 Apr 13 at 22:17 CEST</a>
+		</div>
+	</div>
+	<div class='title'>
+		Premier essai pour tenter de rejoindre une fédération <a href="tag/indieweb">#indieweb</a> chez <a href="http://twitter.com/eschnou" target="_blank">@<span class="p-name p-nickname">eschnou</a></a> <a href="tag/fra">#fra</a>	</div>
+</div>
+<div class='mention' id='mention_17'>
+	<div class='actions'>
+		</div>
+	<div class='avatar'>
+                                <img src='images/book50.jpg' title='User has no avatar' />
+                	</div>
+	<div class='header'>
+		<div class='author'>
+			<a href="http://christopheducamp.com">Christophe Ducamp</a>
+		</div>
+		<div class='when'>
+			<a href="http://christopheducamp.com/blog/les-reponses-indieweb-chez-eschnou/">on 22 Apr 13 at 6:21 CEST</a>
+		</div>
+	</div>
+	<div class='title'>
+		Les réponses <a href="tag/indieweb">#indieweb</a> chez <a href="http://twitter.com/eschnou" target="_blank">@<span class="p-name p-nickname">eschnou</a></a>	</div>
+</div>
+<div class='comment' id='comment_4702'>
+	<div class='actions'>
+		</div>
+	<div class='avatar'>
+		<img src='http://www.gravatar.com/avatar/2a8b9fa5ddd762284645edb176557fc4' alt="Laurent Eschenauer Gravtar" />
+	</div>
+	<div class='header'>
+		<div class='author'>
+						  <a href="http://eschnou.com" rel="nofollow">Laurent Eschenauer</a> 
+				
+		</div>
+		<div class='when'>
+			on 22 Apr 13 at 22:27 CEST		</div>
+	</div>
+	<div class='title'>
+		And now we have unified local/indieweb comments, time ordered ! Let's have a real distributed conversation :-)	</div>	
+</div>
+<div class='comment' id='comment_4703'>
+	<div class='actions'>
+		</div>
+	<div class='avatar'>
+		<img src='http://www.gravatar.com/avatar/2a8b9fa5ddd762284645edb176557fc4' alt="Laurent Eschenauer Gravtar" />
+	</div>
+	<div class='header'>
+		<div class='author'>
+						  <a href="http://eschnou.com" rel="nofollow">Laurent Eschenauer</a> 
+				
+		</div>
+		<div class='when'>
+			on 22 Apr 13 at 22:56 CEST		</div>
+	</div>
+	<div class='title'>
+		<a class="h-card" href="http://aaronparecki.com" target="_blank">@<span class="p-name p-nickname">aaronparecki.com</span></a> This is a reply to your reply, making it a really distributed conversation :-)	</div>	
+</div>
+<div class='mention' id='mention_19'>
+	<div class='actions'>
+		</div>
+	<div class='avatar'>
+                		<img src='http://photos.waterpigs.co.uk/photos/custom/201210/5d5a4d-Facing-Down_100x100xCR.jpg' />
+                	</div>
+	<div class='header'>
+		<div class='author'>
+			<a href="http://waterpigs.co.uk">Barnaby Walters</a>
+		</div>
+		<div class='when'>
+			<a href="http://waterpigs.co.uk/notes/1334/">on 22 Apr 13 at 23:58 CEST</a>
+		</div>
+	</div>
+	<div class='title'>
+		Laurent Eschenauer great work getting <a href="tag/indieweb">#indieweb</a> comments working :)	</div>
+</div>
+<div class='comment' id='comment_4704'>
+	<div class='actions'>
+		</div>
+	<div class='avatar'>
+		<img src='http://www.gravatar.com/avatar/2a8b9fa5ddd762284645edb176557fc4' alt="Laurent Eschenauer Gravtar" />
+	</div>
+	<div class='header'>
+		<div class='author'>
+						  <a href="http://eschnou.com" rel="nofollow">Laurent Eschenauer</a> 
+				
+		</div>
+		<div class='when'>
+			on 23 Apr 13 at 9:39 CEST		</div>
+	</div>
+	<div class='title'>
+		<a class="h-card" href="http://waterpigs.co.uk" target="_blank">@<span class="p-name p-nickname">waterpigs.co.uk</span></a> Thanks for helping out. Could not have done it without your php-mf2 library!	</div>	
+</div>
+<div class='mention' id='mention_21'>
+	<div class='actions'>
+		</div>
+	<div class='avatar'>
+                		<img src='http://photos.waterpigs.co.uk/photos/custom/201210/5d5a4d-Facing-Down_100x100xCR.jpg' />
+                	</div>
+	<div class='header'>
+		<div class='author'>
+			<a href="http://waterpigs.co.uk">Barnaby Walters</a>
+		</div>
+		<div class='when'>
+			<a href="http://waterpigs.co.uk/notes/1337/">on 23 Apr 13 at 10:56 CEST</a>
+		</div>
+	</div>
+	<div class='title'>
+		Historically, I consider this to be the <a href="tag/indieweb">#indieweb</a> equivalent of this.	</div>
+</div>
+<div class='comment' id='comment_4705'>
+	<div class='actions'>
+		</div>
+	<div class='avatar'>
+		<img src='http://www.gravatar.com/avatar/0584d6991c186c9561863e080ff279e8' alt="Matthias Pfefferle Gravtar" />
+	</div>
+	<div class='header'>
+		<div class='author'>
+						  <a href="http://notizblog.org/" rel="nofollow">Matthias Pfefferle</a> 
+				
+		</div>
+		<div class='when'>
+			on 24 Apr 13 at 13:26 CEST		</div>
+	</div>
+	<div class='title'>
+		Hey Laurent, how do you know where you have to "attach" the reply, or do you run this task by hand?	</div>	
+</div>
+<div class='comment' id='comment_4706'>
+	<div class='actions'>
+		</div>
+	<div class='avatar'>
+		<img src='http://www.gravatar.com/avatar/2a8b9fa5ddd762284645edb176557fc4' alt="Laurent Eschenauer Gravtar" />
+	</div>
+	<div class='header'>
+		<div class='author'>
+						  <a href="http://eschnou.com" rel="nofollow">Laurent Eschenauer</a> 
+				
+		</div>
+		<div class='when'>
+			on 24 Apr 13 at 14:04 CEST		</div>
+	</div>
+	<div class='title'>
+		<a class="h-card" href="http://notizblog.org" target="_blank">@<span class="p-name p-nickname">notizblog.org</span></a> Everything is automatic. The pingback request as a 'target' which I map to an existing post (after a bit of regexp magic). In the 'source' item there should also be a link pointing to the target with a 'in-reply-to' tag. More details here: <a href="http://indiewebcamp.com/comment" rel="nofollow">http://indiewebcamp.com/comment</a>	</div>	
+</div>
+<div class='mention' id='mention_22'>
+	<div class='actions'>
+		</div>
+	<div class='avatar'>
+                                <img src='images/book50.jpg' title='User has no avatar' />
+                	</div>
+	<div class='header'>
+		<div class='author'>
+			<a href=""></a>
+		</div>
+		<div class='when'>
+			<a href="http://notizblog.org/2013/04/24/wordpress-and-indieweb-comments/">on 24 Apr 13 at 14:15 CEST</a>
+		</div>
+	</div>
+	<div class='title'>
+		WordPress and IndieWeb-Comments	</div>
+</div>
+<div class='comment' id='comment_4707'>
+	<div class='actions'>
+		</div>
+	<div class='avatar'>
+		<img src='http://www.gravatar.com/avatar/0584d6991c186c9561863e080ff279e8' alt="Matthias Pfefferle Gravtar" />
+	</div>
+	<div class='header'>
+		<div class='author'>
+						  <a href="http://notizblog.org" rel="nofollow">Matthias Pfefferle</a> 
+				
+		</div>
+		<div class='when'>
+			on 24 Apr 13 at 14:21 CEST		</div>
+	</div>
+	<div class='title'>
+		Nice! It seems there is a bug in my mf2 implementation and your storytlr is using the title instead of the post.	</div>	
+</div>
+<div class='comment' id='comment_4708'>
+	<div class='actions'>
+		</div>
+	<div class='avatar'>
+		<img src='http://www.gravatar.com/avatar/2a8b9fa5ddd762284645edb176557fc4' alt="Laurent Eschenauer Gravtar" />
+	</div>
+	<div class='header'>
+		<div class='author'>
+						  <a href="http://eschnou.com" rel="nofollow">Laurent Eschenauer</a> 
+				
+		</div>
+		<div class='when'>
+			on 24 Apr 13 at 14:25 CEST		</div>
+	</div>
+	<div class='title'>
+		There is also a few bugs in my side (also in my own comments timestamp as you can see :-). A bit more work needed, but we are getting there :-) Welcome to the conversation!	</div>	
+</div>
+<div class='comment' id='comment_4709'>
+	<div class='actions'>
+		</div>
+	<div class='avatar'>
+		<img src='http://www.gravatar.com/avatar/0584d6991c186c9561863e080ff279e8' alt="Matthias Pfefferle Gravtar" />
+	</div>
+	<div class='header'>
+		<div class='author'>
+						  <a href="http://notizblog.org" rel="nofollow">Matthias Pfefferle</a> 
+				
+		</div>
+		<div class='when'>
+			on 24 Apr 13 at 15:55 CEST		</div>
+	</div>
+	<div class='title'>
+		BTW, is storytlr also sending pingpacks/webmentions in the comments section? If so, do you have a source url for any "comment" or do you support some kind of html fragments like superfeedr does <a href="http://blog.superfeedr.com/fragment-subscription/" rel="nofollow">http://blog.superfeedr.com/fragment-subscription/</a> ?	</div>	
+</div>
+<div class='comment' id='comment_4710'>
+	<div class='actions'>
+		</div>
+	<div class='avatar'>
+		<img src='http://www.gravatar.com/avatar/2a8b9fa5ddd762284645edb176557fc4' alt="Laurent Eschenauer Gravtar" />
+	</div>
+	<div class='header'>
+		<div class='author'>
+						  <a href="http://eschnou.com" rel="nofollow">Laurent Eschenauer</a> 
+				
+		</div>
+		<div class='when'>
+			on 24 Apr 13 at 21:19 CEST		</div>
+	</div>
+	<div class='title'>
+		<a class="h-card" href="http://notizblog.org" target="_blank">@<span class="p-name p-nickname">notizblog.org</span></a> Yes, I send pingback for any mention within a comment (hence the @ at the begining of this comment) and the pingback is from a URl + fragment to the comment. I'm missing proper mf for the comment but it is coming.	</div>	
+</div>
+<div class='mention' id='mention_26'>
+	<div class='actions'>
+		</div>
+	<div class='avatar'>
+                		<img src='http://christopheducamp.com/images/micro-avatar.jpeg' />
+                	</div>
+	<div class='header'>
+		<div class='author'>
+			<a href="http://christopheducamp.com">Christophe Ducamp</a>
+		</div>
+		<div class='when'>
+			<a href="http://christopheducamp.com/blog/le-premier-fil-de-discussion-federe-de-commentaires-indieweb/">on 25 Apr 13 at 20:48 CEST</a>
+		</div>
+	</div>
+	<div class='title'>
+		Le Premier Fil de Discussion Fédéré de Commentaires <a href="tag/Indieweb">#Indieweb</a>	</div>
+</div>
+<div class='mention' id='mention_27'>
+	<div class='actions'>
+		</div>
+	<div class='avatar'>
+                		<img src='http://photos.waterpigs.co.uk/photos/custom/201210/5d5a4d-Facing-Down_100x100xCR.jpg' />
+                	</div>
+	<div class='header'>
+		<div class='author'>
+			<a href="http://waterpigs.co.uk">Barnaby Walters</a>
+		</div>
+		<div class='when'>
+			<a href="http://waterpigs.co.uk/notes/1358/">on 25 Apr 13 at 22:54 CEST</a>
+		</div>
+	</div>
+	<div class='title'>
+		Hopefully h-card entities should get expanded in the reply context for this note (crosses fingers)	</div>
+</div>
+<div class='mention' id='mention_30'>
+	<div class='actions'>
+		</div>
+	<div class='avatar'>
+                		<img src='https://fbcdn-profile-a.akamaihd.net/hprofile-ak-frc1/c12.47.156.156/s100x100/226570_508277977420_617357257_a.jpg' />
+                	</div>
+	<div class='header'>
+		<div class='author'>
+			<a href="">Tom Morris</a>
+		</div>
+		<div class='when'>
+			<a href="http://tommorris.org/posts/8241">on 26 Apr 13 at 23:39 CEST</a>
+		</div>
+	</div>
+	<div class='title'>
+		Testing, testing, is this thing on?
+
+
+
+
+
+
+    21:46 on 2013-04-26	</div>
+</div>
+<div class='mention' id='mention_55'>
+	<div class='actions'>
+		</div>
+	<div class='avatar'>
+                		<img src='http://werd.io/file/51a7f328bed7de2c06dc5ad8' />
+                	</div>
+	<div class='header'>
+		<div class='author'>
+			<a href="http://werd.io/profile/benwerd">Ben Werdmuller</a>
+		</div>
+		<div class='when'>
+			<a href="http://werd.io/view/51a80a7dbed7de2e068491f6">on 31 May 13 at 4:26 CEST</a>
+		</div>
+	</div>
+	<div class='title'>
+		Ben Werdmuller
+        
+    
+    
+        
+            Really excited by indieweb comments. Impressive idea, and a pointer to what's possible with microformats and webmentions. <a href="http://eschnou.com/entry/testing-indieweb-federation-with-waterpigscouk-aaronpareckicom-and--62-24908.html" rel="nofollow">http://eschnou.com/entry/testing-indieweb-federation-with-waterpigscouk-aaronpareckicom-and--62-24908.html</a>        
+        
+                        
+    
+        3s	</div>
+</div>
+<div class='mention' id='mention_57'>
+	<div class='actions'>
+		</div>
+	<div class='avatar'>
+                		<img src='http://werd.io/file/51a7f328bed7de2c06dc5ad8' />
+                	</div>
+	<div class='header'>
+		<div class='author'>
+			<a href="http://werd.io/profile/benwerd">Ben Werdmuller</a>
+		</div>
+		<div class='when'>
+			<a href="http://werd.io/view/51a80d0ebed7de270621a12d">on 31 May 13 at 4:37 CEST</a>
+		</div>
+	</div>
+	<div class='title'>
+		Foot very much in mouth, here ends my <a href="tag/indieweb">#indieweb</a> comment testing for the night.        
+        
+                        
+    
+        4s	</div>
+</div>
+<div class='mention' id='mention_59'>
+	<div class='actions'>
+		</div>
+	<div class='avatar'>
+                		<img src='http://photos.waterpigs.co.uk/photos/custom/201210/5d5a4d-Facing-Down_100x100xCR.jpg' />
+                	</div>
+	<div class='header'>
+		<div class='author'>
+			<a href="http://waterpigs.co.uk">Barnaby Walters</a>
+		</div>
+		<div class='when'>
+			<a href="http://waterpigs.co.uk/notes/1479/">on 31 May 13 at 11:05 CEST</a>
+		</div>
+	</div>
+	<div class='title'>
+		Another <a href="tag/indieweb">#indieweb</a> creator has commented on Laurent Eschenauer’s famous thread with a new implementation — congratulations benwerd!	</div>
+</div>
+<div class='mention' id='mention_80'>
+	<div class='actions'>
+		</div>
+	<div class='avatar'>
+                		<img src='http://www.gravatar.com/avatar/64a4d7587e6e3db5b5ff8152b25eb1bc?s=420&d=mm&r=g' />
+                	</div>
+	<div class='header'>
+		<div class='author'>
+			<a href="http://www.sandeep.io/">Sandeep Shetty</a>
+		</div>
+		<div class='when'>
+			<a href="http://www.sandeep.io/32">on 4 Jun 13 at 14:01 CEST</a>
+		</div>
+	</div>
+	<div class='title'>
+		Just implemented the ability to send [WebMentions](<a href="http://webmention.org)/Pingback" rel="nofollow">http://webmention.org)/Pingback</a>. A little late to the party but here goes... <a href="tag/indieweb">#indieweb</a>	</div>
+</div>
+<div class='mention' id='mention_82'>
+	<div class='actions'>
+		</div>
+	<div class='avatar'>
+                		<img src='http://www.gravatar.com/avatar/64a4d7587e6e3db5b5ff8152b25eb1bc?s=420&d=mm&r=g' />
+                	</div>
+	<div class='header'>
+		<div class='author'>
+			<a href="http://www.sandeep.io/">Sandeep Shetty</a>
+		</div>
+		<div class='when'>
+			<a href="http://www.sandeep.io/44">5 days ago</a>
+		</div>
+	</div>
+	<div class='title'>
+		This was linked to here: <a href="http://www.sandeep.io/44" rel="nofollow">http://www.sandeep.io/44</a>	</div>
+</div>
+</div>
+</div>		
+<div class='item_add_comment' id='add_comment_62_24908'>
+	<div class="formfeedback" id="form_add_comment_errors_62_24908">
+</div>
+<form id="form_add_comment_62_24908" name="form_add_comment_62_24908" enctype="application/x-www-form-urlencoded" method="post" action=""><table>
+<tr><td class="label"><label for="comment" class="required">Comment:</label>
+<td class="element">
+<textarea name="comment" id="comment" rows="4" cols="60"></textarea></td></td></tr>
+<tr><td class="label"><label for="name" class="required">Name:</label>
+<td class="element">
+<input type="text" name="name" id="name" value=""></td></td></tr>
+<tr><td class="label"><label for="email" class="required">Email (confidential):</label>
+<td class="element">
+<input type="text" name="email" id="email" value=""></td></td></tr>
+<tr><td class="label"><label for="website" class="optional">Website (optional):</label>
+<td class="element">
+<input type="text" name="website" id="website" value=""></td></td></tr>
+<tr><td class="label"><td class="element">
+<label><input type="checkbox" name="options[]" id="options-notify" value="notify" checked="checked">Notify me of followup comments via e-mail</label></td></td></tr>
+
+<input type="hidden" name="source" value="62" id="source">
+
+<input type="hidden" name="item" value="24908" id="item">
+<td class="label"></td><td class="element">
+
+<button name="post" id="post" type="button" onclick="submitFormAddComment(62, 24908);">Post</button>
+
+<button name="cancel" id="cancel" type="button" onclick="cancelFormAddComment(62, 24908);">Cancel</button></td></table></form><br class="fix" />
+</div>		
+				</div>
+				
+				<div class="bottom_nav">
+					<div class="pagination">
+														 					</div>
+				</div>
+			
+				<div id="footer-wrapper">
+					<div id="footer">
+						Web site powered by <a href="http://storytlr.org">storytlr</a>, version 1.3.dev, available under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License version 2.0</a>.
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<br class="fix"/>
+	
+</div>
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-3039760-4");
+pageTracker._trackPageview();
+</script>
+<!-- Include required javascript -->
+<script type="text/javascript" src="js/prototype/prototype.js"></script>
+<script type="text/javascript" src="js/scriptaculous/builder.js"></script>
+<script type="text/javascript" src="js/scriptaculous/effects.js"></script>
+<script type="text/javascript" src="js/scriptaculous/dragdrop.js"></script>
+<script type="text/javascript" src="js/scriptaculous/controls.js"></script>
+<script type="text/javascript" src="js/scriptaculous/slider.js"></script>
+<script type="text/javascript" src="js/scriptaculous/sound.js"></script>
+<script type="text/javascript" src="js/storytlr/validateForm.js"></script>
+<script type="text/javascript" src="js/storytlr/common.js"></script>
+<script type="text/javascript" src="js/controllers/adminbar.js"></script>
+<script type="text/javascript" src="js/accordion/accordion.js"></script>
+<script type="text/javascript" src="js/controllers/timeline.js"></script>
+<script type="text/javascript" src="js/accordion/init.js"></script><!-- End include required javascript -->
+
+
+</body>
+</html>

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<phpunit strict="true">
+ <php>
+  <includePath>../src/</includePath>
+  <includePath>../tests/</includePath>
+ </php>
+ <filter>
+  <whitelist addUncoveredFilesFromWhitelist="true">
+   <directory suffix=".php">../src/</directory>
+  </whitelist>
+ </filter>
+</phpunit>

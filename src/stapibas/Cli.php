@@ -128,7 +128,8 @@ class Cli
         $cf = new Content_Fetcher($deps);
         $cf->updateAll();
 
-        //FIXME
+        $cx = new Content_Extractor($deps);
+        $cx->updateAll();
     }
 
 
