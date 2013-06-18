@@ -48,7 +48,7 @@ class Content_Extractor
 
         //delete old content
         $this->db->exec(
-            'DELETE FROM rboomarks WHERE'
+            'DELETE FROM rbookmarks WHERE'
             . ' rb_pc_id = ' . $this->db->quote($contentRow->pc_id)
         );
         $this->db->exec(
@@ -86,7 +86,6 @@ class Content_Extractor
         $data = $ce->extract($doc, $contentRow->p_source, $contentRow->p_target);
         if ($data !== null) {
             $this->log->info('Link found');
-            var_dump($data);
             $this->db->exec(
                 'INSERT INTO rlinks SET'
                 . '  rl_pc_id = ' . $this->db->quote($contentRow->pc_id)
@@ -96,7 +95,7 @@ class Content_Extractor
                 . ', rl_author_name = ' . $this->db->quote($data['author_name'])
                 . ', rl_author_url = ' . $this->db->quote($data['author_url'])
                 . ', rl_author_image = ' . $this->db->quote($data['author_image'])
-                . ', rc_updated = NOW()'
+                . ', rl_updated = NOW()'
             );
             return;
         }
