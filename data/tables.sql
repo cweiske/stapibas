@@ -46,7 +46,7 @@ CREATE TABLE `pingbackcontent` (
   `pc_detected_type` varchar(16) NOT NULL,
   PRIMARY KEY (`pc_id`),
   UNIQUE KEY `pc_id` (`pc_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 
 CREATE TABLE `pingbacks` (
@@ -75,6 +75,7 @@ CREATE TABLE `pingbacktargets` (
 
 CREATE TABLE `rbookmarks` (
   `rb_id` int(11) NOT NULL AUTO_INCREMENT,
+  `rb_p_id` int(11) NOT NULL,
   `rb_pc_id` int(11) NOT NULL,
   `rb_target` varchar(2048) NOT NULL,
   `rb_source` varchar(2048) NOT NULL,
@@ -87,6 +88,7 @@ CREATE TABLE `rbookmarks` (
 
 CREATE TABLE `rcomments` (
   `rc_id` int(11) NOT NULL AUTO_INCREMENT,
+  `rc_p_id` int(11) NOT NULL,
   `rc_pc_id` int(11) NOT NULL,
   `rc_target` varchar(2048) NOT NULL,
   `rc_source` varchar(2048) NOT NULL,
@@ -103,6 +105,7 @@ CREATE TABLE `rcomments` (
 
 CREATE TABLE `rlinks` (
   `rl_id` int(11) NOT NULL AUTO_INCREMENT,
+  `rl_p_id` int(11) NOT NULL,
   `rl_pc_id` int(11) NOT NULL,
   `rl_target` varchar(2048) NOT NULL,
   `rl_source` varchar(2048) NOT NULL,
@@ -113,6 +116,6 @@ CREATE TABLE `rlinks` (
   `rl_author_image` varchar(2048) NOT NULL,
   PRIMARY KEY (`rl_id`),
   UNIQUE KEY `rb_id` (`rl_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Bookmarks, extracted from pingbackcontent';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Bookmarks, extracted from pingbackcontent';
 
 

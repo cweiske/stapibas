@@ -67,7 +67,8 @@ class Content_Extractor
             var_dump($data);
             $this->db->exec(
                 'INSERT INTO rcomments SET'
-                . '  rc_pc_id = ' . $this->db->quote($contentRow->pc_id)
+                . '  rc_p_id = ' . $this->db->quote($contentRow->p_id)
+                . ', rc_pc_id = ' . $this->db->quote($contentRow->pc_id)
                 . ', rc_source = ' . $this->db->quote($contentRow->p_source)
                 . ', rc_target = ' . $this->db->quote($contentRow->p_target)
                 . ', rc_title = ' . $this->db->quote($data['title'])
@@ -88,7 +89,8 @@ class Content_Extractor
             $this->log->info('Link found');
             $this->db->exec(
                 'INSERT INTO rlinks SET'
-                . '  rl_pc_id = ' . $this->db->quote($contentRow->pc_id)
+                . '  rl_p_id = ' . $this->db->quote($contentRow->p_id)
+                . ', rl_pc_id = ' . $this->db->quote($contentRow->pc_id)
                 . ', rl_source = ' . $this->db->quote($contentRow->p_source)
                 . ', rl_target = ' . $this->db->quote($contentRow->p_target)
                 . ', rl_title = ' . $this->db->quote($data['title'])

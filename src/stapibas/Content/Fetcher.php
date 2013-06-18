@@ -56,13 +56,15 @@ class Content_Fetcher
             return;
         }
 
-        $this->db->exec(
-            'DELETE FROM pingbackcontent WHERE'
-            . ' pc_p_id = ' . $this->db->quote($pingbackRow->p_id)
-        );
+        $qPid = $this->db->quote($pingbackRow->p_id);
+        $this->db->exec('DELETE FROM pingbackcontent WHERE pc_p_id = ' . $qPid);
+        $this->db->exec('DELETE FROM rbookmarks WHERE rb_p_id = ' . $qPid);
+        $this->db->exec('DELETE FROM rcomments  WHERE rc_p_id = ' . $qPid);
+        $this->db->exec('DELETE FROM rlinks     WHERE rl_p_id = ' . $qPid);
+
         $this->db->exec(
             'INSERT INTO pingbackcontent SET'
-            . '  pc_p_id = ' . $this->db->quote($pingbackRow->p_id)
+            . '  pc_p_id = ' . $qPid
             . ', pc_mime_type = '
             . $this->db->quote($res->getHeader('content-type'))
             . ', pc_fulltext = ' . $this->db->quote($res->getBody())
