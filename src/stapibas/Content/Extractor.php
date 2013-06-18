@@ -78,6 +78,7 @@ class Content_Extractor
                 . ', rc_content = ' . $this->db->quote($data['content'])
                 . ', rc_updated = NOW()'
             );
+            $this->setDetectedType($contentRow, 'comment');
             return;
         }
 
@@ -99,10 +100,21 @@ class Content_Extractor
                 . ', rl_author_image = ' . $this->db->quote($data['author_image'])
                 . ', rl_updated = NOW()'
             );
+            $this->setDetectedType($contentRow, 'link');
             return;
         }
 
+        $this->setDetectedType($contentRow, 'nothing');
         $this->log->info('Nothing found');
+    }
+
+    protected function setDetectedType($contentRow, $type)
+    {
+        $this->db->exec(
+            'UPDATE pingbackcontent'
+            . ' SET pc_detected_type = ' . $this->db->quote($type)
+            . ' WHERE pc_id = ' . $this->db->quote($contentRow->pc_id)
+        );
     }
 
 
