@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+ <head profile="http://microformats.org/profile/rel-tag http://microformats.org/profile/h-entry">
+  <title>Shadowbox: Manual popup positioning</title>
+  <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/" />
+  <meta name="author" content="Christian Weiske" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="content-language" content="en" />
+  <meta name="keywords" content="programming, web" />
+  <meta name="DC.date.created" content="2013-04-30T22:10:01+02:00" />
+  <meta name="DC.date.modified" content="2013-04-30T22:10:01+02:00" />
+  <link rel="license" type="text/html" href="http://creativecommons.org/licenses/by-nc-sa/3.0/" />
+  <link rel="license" type="application/rdf+xml" href="http://creativecommons.org/licenses/by-nc-sa/3.0/rdf" />
+  <link rel="canonical" href="http://www.netresearch.de/blog/shadowbox-manual-popup-positioning/" />
+   <link rel="stylesheet" type="text/css" href="tagebuch.css"/>
+  <link rel="contents" href="./" title="Sitemap"/>
+  <link rel="author" href="/" title="About the creator of this post"/>
+ 
+  <link rel="prev" href="php-redirection-limit-reached.htm" title="Next blog entry"/>
+ 
+  <link rel="next" href="gitorious-wildcard-search.htm" title="Previous blog entry"/>
+ 
+  <!--[if IE]>
+  <meta http-equiv="refresh" content="5; url=http://stackoverflow.com/q/9182692/282601">
+  <![endif]--></head>
+ <body class="h-entry hentry">
+ <div class="sidebar">
+  <!-- date -->
+  <p>
+   <span title="2013-04-30T22:10:01+02:00" class="dt-published published">
+    April 30, 2013   </span>
+     </p>
+
+  <ul class="prevnext">
+     <li class="next"><a href="gitorious-wildcard-search.htm">Gitorious: Enable wildcard search</a></li>
+   <li><a href="php-redirection-limit-reached.htm">PHP: Redirection limit reached</a></li>
+   <li class="up"><a href="./">Tagebuch</a></li>
+  </ul>
+
+  <h3>Tags</h3>
+  <ul class="tags">
+     <li><a rel="tag" class="p-category" href="tag/programming">programming</a>
+    <ul>
+     <li><a href="json-display.htm">Displaying JSON in your browser</a></li>
+    </ul>
+   </li>
+   <li><a rel="tag" class="p-category" href="tag/web">web</a>
+    <ul>
+     <li><a href="json-display.htm">Displaying JSON in your browser</a></li>
+    </ul>
+   </li>
+  </ul>
+ </div>
+
+ <div class="frame">
+  <h1 class="p-name entry-title">Shadowbox: Manual popup positioning</h1>
+
+  <div id="content" class="e-content entry-content">
+
+  <div class="warning">
+   <p>
+    This article has originally been published on my employer's
+    blog: 
+    <a href="http://www.netresearch.de/blog/shadowbox-manual-popup-positioning/">
+     Shadowbox: Manual popup positioning @ netresearch
+    </a>.
+   </p>
+  </div>
+
+  <p>
+   <a href="http://shadowbox-js.com/">Shadowbox</a> can be used to display
+   images, videos or other HTML pages in a popup on your website.
+   Sometimes it is necessary to manually adjust the position of the overlay
+   window, for example when using it in an iframe with a very large
+   height setting.
+   Shadowbox itself does not offer a hook to modify the position, but with some
+   JavaScript trickery it is possible to manipulate the position nevertheless.
+  </p>
+  <p>
+   The idea is - since we have no hook to register with - to replace the
+   original positioning method with our own.
+   Since JavaScript allows method renaming, this is fairly easy.
+  </p>
+
+
+  <h2 id="static-position">Static position<a class="anchorlink" href="#static-position"></a></h2>
+  <p>
+   Shadowbox uses method <tt>setDimensions()</tt> to calculate and set position
+   and size of the popup window.
+   We rename it and put our own method at this place:
+  </p>
+  <pre><code class="lang-js"><![CDATA[<script type="text/javascript">
+window.Shadowbox.setDimensionsOld = window.Shadowbox.setDimensions;
+window.Shadowbox.setDimensions = function (height, width, maxHeight, maxWidth, topBottom, leftRight, padding, preserveAspect) {
+    var S = window.Shadowbox;
+    window.Shadowbox.setDimensionsOld(height, width, maxHeight, maxWidth, topBottom, leftRight, padding, preserveAspect);
+    window.Shadowbox.dimensions.top = 10;
+    return window.Shadowbox.dimensions;
+}
+</script>
+]]></code></pre>
+  <p>
+   Now we have our shadowbox popup fixed at 10 pixels from the top of the page.
+  </p>
+  <p>
+   Have a look at the
+   <a href="demo/shadowbox-manual-positioning/static.html">static positioning demo</a>.
+  </p>
+
+
+  <h2 id="dynamic-position">Dynamic position<a class="anchorlink" href="#dynamic-position"></a></h2>
+  <p>
+   When you have an iframe with some several thousand pixels in height,
+   you don't want to have a fixed position on top but a position near the mouse
+   cursor or the element that has been clicked.
+  </p>
+  <p>
+  The following code positions the popup 10 pixels below the object that has
+  been clicked to open the overlay:
+  </p>
+  <pre><code class="lang-js"><![CDATA[<script type="text/javascript">
+window.Shadowbox.setDimensionsOld = window.Shadowbox.setDimensions;
+window.Shadowbox.setDimensions = function (height, width, maxHeight, maxWidth, topBottom, leftRight, padding, preserveAspect) {
+    var S = window.Shadowbox;
+    window.Shadowbox.setDimensionsOld(height, width, maxHeight, maxWidth, topBottom, leftRight, padding, preserveAspect);
+    if (window.shadowboxClickObj && window.shadowboxClickObj.link) {
+        var offset = $(window.shadowboxClickObj.link).offset();
+        window.Shadowbox.dimensions.top = offset.top + 10;
+        $('#sb-container').css({position: 'absolute', 'height': $(document).height()});
+    }
+    return window.Shadowbox.dimensions
+}
+
+window.Shadowbox.skin.onOpenOld = window.Shadowbox.skin.onOpen;
+window.Shadowbox.skin.onOpen = function(obj, callback) {
+    window.shadowboxClickObj = obj;
+    window.Shadowbox.skin.onOpenOld(obj, callback);
+}
+</script>
+]]></code></pre>
+  <p>
+   Here, <tt>onOpen()</tt> needs to be overwritten as well because the clicked
+  object is not available anymore in <tt>setDimensions()</tt>.
+  </p>
+  <p>
+   Have a look at the
+   <a href="demo/shadowbox-manual-positioning/dynamic.html">dynamic positioning demo</a>.
+  </p>
+ 
+  </div>
+  <div class="comments">
+   <p>
+    Comments? Please
+    <a href="&#x6D;&#x61;&#x69;&#x6C;&#x74;&#x6F;&#x3A;Christian%20Weiske%20%3C&#x63;&#x77;&#x65;&#x69;&#x73;&#x6B;&#x65;&#x0040;&#x63;&#x77;&#x65;&#x69;&#x73;&#x6B;&#x65;&#x2E;&#x64;&#x65;%3E?subject=Re:%20Shadowbox%3A%20Manual%20popup%20positioning">send an e-mail</a>.
+   </p>
+  </div>
+ </div></body>
+</html>
