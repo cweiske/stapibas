@@ -123,7 +123,7 @@ class Content_Extractor
         if ($this->deps->options['force']) {
             return '';
         }
-        return ' AND pc_detected_type = 1';
+        return ' AND pc_detected_type = ""';
     }
 
 }
