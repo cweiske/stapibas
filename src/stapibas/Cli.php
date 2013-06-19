@@ -75,6 +75,15 @@ class Cli
     ) {
         $tasks = array_flip(explode(',', $result->command->options['tasks']));
 
+        //if an ID/url is given, only execute the matching task
+        if (isset($result->command->options['feed'])) {
+            $tasks = array('feeds' => 1);
+        } else if (isset($result->command->options['entry'])) {
+            $tasks = array('entries' => 1);
+        } else if (isset($result->command->options['entryurl'])) {
+            $tasks = array('urls' => 1);
+        }
+
         if (isset($tasks['feeds'])) {
             $this->runFeedUpdateFeeds($deps);
         }
