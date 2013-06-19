@@ -1,0 +1,7 @@
+<a href="{{linkRow.rl_source}}">{{linkRow.rl_title}}</a>
+{% if linkRow.rl_author_name %}
+  by 
+  {% if linkRow.rl_author_url %}<a href="{{linkRow.rl_author_url}}">{% endif %}
+  {{linkRow.rl_author_name}}
+  {% if linkRow.rl_author_url %}</a>{% endif %}
+{% endif %}

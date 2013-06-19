@@ -1,0 +1,10 @@
+{% if commentRow.rc_author_image %}<img src="{{commentRow.rc_author_image}}" alt="Avatar for {{commentRow.rc_author_name}}" style="max-width: 48px; max-height: 48px"/>{% endif %}
+
+{% if linkRow.rc_author_url %}<a href="{{linkRow.rc_author_url}}">{% endif %}
+{{commentRow.rc_author_name}}
+{% if linkRow.rc_author_url %}</a>{% endif %}
+
+<div>
+ {% if commentRow.rc_title %}<h3>{{commentRow.rc_title}}</h3>{% endif %}
+ {{commentRow.rl_comment|raw}}
+</div>

@@ -1,0 +1,17 @@
+{% if arData.comments %}
+<h3 id="m-comments">Comments</h3>
+<ul class="m-container m-comments">
+ {% for commentRow in arData.comments %}
+   {% include 'mentions-comment.htm' %}
+ {% endfor %}
+</ul>
+{% endif %}
+
+{% if arData.links %}
+<h3 id="m-links">Links to this page</h3>
+<ul class="m-container m-links">
+ {% for linkRow in arData.links %}
+   <li>{% include 'mentions-link.htm' %}</li>
+ {% endfor %}
+</ul>
+{% endif %}
