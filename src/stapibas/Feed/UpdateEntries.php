@@ -176,9 +176,17 @@ class Feed_UpdateEntries
 
         $xpath = new \DOMXPath($doc);
         $xpath->registerNamespace('h', 'http://www.w3.org/1999/xhtml');
+        // all links in e-content AND u-in-reply-to links
         $query = '//*[' . $this->xpc('h-entry') . ' or ' . $this->xpc('hentry') . ']'
             . '//*[' . $this->xpc('e-content') . ' or ' . $this->xpc('entry-content') . ']'
-            . '//*[(self::a or self::h:a) and @href and not(starts-with(@href, "#"))]';
+            . '//*[(self::a or self::h:a) and @href and not(starts-with(@href, "#"))]'
+            . ' | '
+            . '//*[' . $this->xpc('h-entry') . ' or ' . $this->xpc('hentry') . ']'
+            . '//*['
+            . '(self::a or self::h:a) and @href and not(starts-with(@href, "#"))'
+            . 'and ' . $this->xpc('u-in-reply-to')
+            . ']';
+;
         $links = $xpath->query($query);
         $this->log->info('%d links found', $links->length);
 
