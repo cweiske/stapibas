@@ -16,7 +16,7 @@ class Feed_PingUrls
         $this->db   = $deps->db;
         $this->log  = $deps->log;
 
-        $this->pbc = new \PEAR2\Services\Pingback\Client();
+        $this->pbc = new \PEAR2\Services\Linkback\Client();
 
         $req = new \HTTP_Request2();
         $req->setConfig(

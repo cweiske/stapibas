@@ -42,26 +42,26 @@ class Renderer_Html
         );
 
         $stmt = $this->db->query(
-            'SELECT * FROM pingbacks, rbookmarks'
-            . ' WHERE p_id = rb_p_id AND p_use = 1'
-            . ' AND p_target = ' . $this->db->quote($url)
-            . ' ORDER BY p_time ASC'
+            'SELECT * FROM linkbacks, rbookmarks'
+            . ' WHERE l_id = rb_l_id AND l_use = 1'
+            . ' AND l_target = ' . $this->db->quote($url)
+            . ' ORDER BY l_time ASC'
         );
         $arData['bookmarks'] = $stmt->fetchAll();
 
         $stmt = $this->db->query(
-            'SELECT * FROM pingbacks, rcomments'
-            . ' WHERE p_id = rc_p_id AND p_use = 1'
-            . ' AND p_target = ' . $this->db->quote($url)
-            . ' ORDER BY p_time ASC'
+            'SELECT * FROM linkbacks, rcomments'
+            . ' WHERE l_id = rc_l_id AND l_use = 1'
+            . ' AND l_target = ' . $this->db->quote($url)
+            . ' ORDER BY l_time ASC'
         );
         $arData['comments'] = $stmt->fetchAll();
 
         $stmt = $this->db->query(
-            'SELECT * FROM pingbacks, rlinks'
-            . ' WHERE p_id = rl_p_id AND p_use = 1'
-            . ' AND p_target = ' . $this->db->quote($url)
-            . ' ORDER BY p_time ASC'
+            'SELECT * FROM linkbacks, rlinks'
+            . ' WHERE l_id = rl_l_id AND l_use = 1'
+            . ' AND l_target = ' . $this->db->quote($url)
+            . ' ORDER BY l_time ASC'
         );
         $arData['links'] = $stmt->fetchAll();
 

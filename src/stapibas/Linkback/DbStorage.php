@@ -1,10 +1,10 @@
 <?php
 namespace stapibas;
 
-class Pingback_DbStorage
-    implements \PEAR2\Services\Pingback\Server\Callback\IStorage,
-    \PEAR2\Services\Pingback\Server\Callback\ILink,
-    \PEAR2\Services\Pingback\Server\Callback\ITarget
+class Linkback_DbStorage
+    implements \PEAR2\Services\Linkback\Server\Callback\IStorage,
+    \PEAR2\Services\Linkback\Server\Callback\ILink,
+    \PEAR2\Services\Linkback\Server\Callback\ITarget
 {
     public function __construct(PDO $db)
     {
@@ -23,13 +23,13 @@ class Pingback_DbStorage
     public function verifyTargetExists($target)
     {
         $res = $this->db->query(
-            'SELECT COUNT(*) as count FROM pingbacktargets'
-            . ' WHERE ' . $this->db->quote($target) . ' LIKE pt_url'
+            'SELECT COUNT(*) as count FROM linkbacktargets'
+            . ' WHERE ' . $this->db->quote($target) . ' LIKE lt_url'
         );
         $answer = $res->fetch(\PDO::FETCH_OBJ);
         if ($answer->count == 0) {
             throw new \Exception(
-                'The specified target URI cannot be used as a target.',
+                'The specified target URI is not allowed as target.',
                 33
             );
         }
@@ -37,27 +37,27 @@ class Pingback_DbStorage
         return true;
     }
 
-    public function storePingback(
+    public function storeLinkback(
         $target, $source, $sourceBody, \HTTP_Request2_Response $res
     ) {
         if ($this->alreadyExists($target, $source)) {
             throw new \Exception(
-                'Pingback from ' . $source . ' to ' . $target
+                'Linkback from ' . $source . ' to ' . $target
                 . ' has already been registered.',
                 48
             );
         }
         $stmt = $this->db->prepare(
-            'INSERT INTO pingbacks SET'
-            . '  p_source = :source'
-            . ', p_target = :target'
-            . ', p_time = NOW()'
-            . ', p_client_ip = :ip'
-            . ', p_client_agent = :agent'
-            . ', p_client_referer = :referer'
-            . ', p_needs_review = 1'
-            . ', p_use = 1'
-            . ', p_needs_update = 1'
+            'INSERT INTO linkbacks SET'
+            . '  l_source = :source'
+            . ', l_target = :target'
+            . ', l_time = NOW()'
+            . ', l_client_ip = :ip'
+            . ', l_client_agent = :agent'
+            . ', l_client_referer = :referer'
+            . ', l_needs_review = 1'
+            . ', l_use = 1'
+            . ', l_needs_update = 1'
         );
         $stmt->execute(
             array(
@@ -76,9 +76,9 @@ class Pingback_DbStorage
     protected function alreadyExists($target, $source)
     {
         $res = $this->db->query(
-            'SELECT COUNT(*) as count FROM pingbacks'
-            . ' WHERE p_source = ' . $this->db->quote($source)
-            . ' AND p_target = ' . $this->db->quote($target)
+            'SELECT COUNT(*) as count FROM linkbacks'
+            . ' WHERE l_source = ' . $this->db->quote($source)
+            . ' AND l_target = ' . $this->db->quote($target)
         );
         $answer = $res->fetch(\PDO::FETCH_OBJ);
         return $answer->count > 0;
@@ -88,7 +88,7 @@ class Pingback_DbStorage
      * Verifies that a link from $source to $target exists.
      *
      * @param string $target     Target URI that should be linked in $source
-     * @param string $source     Pingback source URI that should link to target
+     * @param string $source     Linkback source URI that should link to target
      * @param string $sourceBody Content of $source URI
      * @param object $res        HTTP response from fetching $source
      *

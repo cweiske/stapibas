@@ -19,58 +19,58 @@ class Content_Extractor
      */
     public function updateAll()
     {
-        $this->log->info('Extracting pingback content..');
+        $this->log->info('Extracting linkback content..');
         $res = $this->db->query(
-            'SELECT * FROM pingbackcontent, pingbacks'
-            . ' WHERE p_id = pc_p_id' . $this->sqlNeedsUpdate()
+            'SELECT * FROM linkbackcontent, linkbacks'
+            . ' WHERE l_id = lc_l_id' . $this->sqlNeedsUpdate()
         );
         $items = 0;
         while ($contentRow = $res->fetch(\PDO::FETCH_OBJ)) {
             ++$items;
             $this->extractContent($contentRow);
         }
-        $this->log->info('Finished extracting %d pingback contents.', $items);
+        $this->log->info('Finished extracting %d linkback contents.', $items);
     }
 
     protected function extractContent($contentRow)
     {
         $doc = new \DOMDocument();
-        $typeParts = explode(';', $contentRow->pc_mime_type);
+        $typeParts = explode(';', $contentRow->lc_mime_type);
         $type = $typeParts[0];
         if ($type == 'application/xhtml+xml'
             || $type == 'application/xml'
             || $type == 'text/xml'
         ) {
-            $doc->loadXML($contentRow->pc_fulltext);
+            $doc->loadXML($contentRow->lc_fulltext);
         } else { 
-            $doc->loadHTML($contentRow->pc_fulltext);
+            $doc->loadHTML($contentRow->lc_fulltext);
         }
 
         //delete old content
         $this->db->exec(
             'DELETE FROM rbookmarks WHERE'
-            . ' rb_pc_id = ' . $this->db->quote($contentRow->pc_id)
+            . ' rb_lc_id = ' . $this->db->quote($contentRow->lc_id)
         );
         $this->db->exec(
             'DELETE FROM rcomments WHERE'
-            . ' rc_pc_id = ' . $this->db->quote($contentRow->pc_id)
+            . ' rc_lc_id = ' . $this->db->quote($contentRow->lc_id)
         );
         $this->db->exec(
             'DELETE FROM rlinks WHERE'
-            . ' rl_pc_id = ' . $this->db->quote($contentRow->pc_id)
+            . ' rl_lc_id = ' . $this->db->quote($contentRow->lc_id)
         );
 
         $ce = new Content_Extractor_Comment($this->deps->log);
-        $data = $ce->extract($doc, $contentRow->p_source, $contentRow->p_target);
+        $data = $ce->extract($doc, $contentRow->l_source, $contentRow->l_target);
         if ($data !== null) {
             $this->log->info('Comment found');
             var_dump($data);
             $this->db->exec(
                 'INSERT INTO rcomments SET'
-                . '  rc_p_id = ' . $this->db->quote($contentRow->p_id)
-                . ', rc_pc_id = ' . $this->db->quote($contentRow->pc_id)
-                . ', rc_source = ' . $this->db->quote($contentRow->p_source)
-                . ', rc_target = ' . $this->db->quote($contentRow->p_target)
+                . '  rc_l_id = ' . $this->db->quote($contentRow->l_id)
+                . ', rc_lc_id = ' . $this->db->quote($contentRow->lc_id)
+                . ', rc_source = ' . $this->db->quote($contentRow->l_source)
+                . ', rc_target = ' . $this->db->quote($contentRow->l_target)
                 . ', rc_title = ' . $this->db->quote($data['title'])
                 . ', rc_author_name = ' . $this->db->quote($data['author_name'])
                 . ', rc_author_url = ' . $this->db->quote($data['author_url'])
@@ -85,15 +85,15 @@ class Content_Extractor
         //FIXME: bookmark
 
         $ce = new Content_Extractor_Link($this->deps->log);
-        $data = $ce->extract($doc, $contentRow->p_source, $contentRow->p_target);
+        $data = $ce->extract($doc, $contentRow->l_source, $contentRow->l_target);
         if ($data !== null) {
             $this->log->info('Link found');
             $this->db->exec(
                 'INSERT INTO rlinks SET'
-                . '  rl_p_id = ' . $this->db->quote($contentRow->p_id)
-                . ', rl_pc_id = ' . $this->db->quote($contentRow->pc_id)
-                . ', rl_source = ' . $this->db->quote($contentRow->p_source)
-                . ', rl_target = ' . $this->db->quote($contentRow->p_target)
+                . '  rl_l_id = ' . $this->db->quote($contentRow->l_id)
+                . ', rl_lc_id = ' . $this->db->quote($contentRow->lc_id)
+                . ', rl_source = ' . $this->db->quote($contentRow->l_source)
+                . ', rl_target = ' . $this->db->quote($contentRow->l_target)
                 . ', rl_title = ' . $this->db->quote($data['title'])
                 . ', rl_author_name = ' . $this->db->quote($data['author_name'])
                 . ', rl_author_url = ' . $this->db->quote($data['author_url'])
@@ -111,9 +111,9 @@ class Content_Extractor
     protected function setDetectedType($contentRow, $type)
     {
         $this->db->exec(
-            'UPDATE pingbackcontent'
-            . ' SET pc_detected_type = ' . $this->db->quote($type)
-            . ' WHERE pc_id = ' . $this->db->quote($contentRow->pc_id)
+            'UPDATE linkbackcontent'
+            . ' SET lc_detected_type = ' . $this->db->quote($type)
+            . ' WHERE lc_id = ' . $this->db->quote($contentRow->lc_id)
         );
     }
 
@@ -123,7 +123,7 @@ class Content_Extractor
         if ($this->deps->options['force']) {
             return '';
         }
-        return ' AND pc_detected_type = ""';
+        return ' AND lc_detected_type = ""';
     }
 
 }

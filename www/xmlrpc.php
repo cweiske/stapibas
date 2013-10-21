@@ -12,8 +12,8 @@ require_once 'stapibas/autoloader.php';
 $db = new PDO($dbdsn, $dbuser, $dbpass);
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-$s = new \PEAR2\Services\Pingback\Server();
-$s->addCallback(new Pingback_DbStorage($db));
-$s->addCallback(new Pingback_Mailer());
+$s = new \PEAR2\Services\Linkback\Server();
+$s->addCallback(new Linkback_DbStorage($db));
+$s->addCallback(new Linkback_Mailer());
 $s->run();
 ?>

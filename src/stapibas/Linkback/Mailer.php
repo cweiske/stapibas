@@ -1,16 +1,16 @@
 <?php
 namespace stapibas;
 
-class Pingback_Mailer
-    implements \PEAR2\Services\Pingback\Server\Callback\IStorage
+class Linkback_Mailer
+    implements \PEAR2\Services\Linkback\Server\Callback\IStorage
 {
-    public function storePingback(
+    public function storeLinkback(
         $target, $source, $sourceBody, \HTTP_Request2_Response $res
     ) {
         mail(
             'cweiske@cweiske.de',
-            'New pingback',
-            "A pingback just came in, for\n"
+            'New linkback',
+            "A linkback just came in, for\n"
             . '> '  . $target . "\n"
             . "from\n"
             . '> ' . $source . "\n"

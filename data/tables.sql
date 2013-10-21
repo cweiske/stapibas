@@ -8,7 +8,7 @@ CREATE TABLE `feedentries` (
   `fe_needs_update` tinyint(1) NOT NULL,
   PRIMARY KEY (`fe_id`),
   UNIQUE KEY `fe_id` (`fe_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 
 CREATE TABLE `feedentryurls` (
@@ -25,7 +25,7 @@ CREATE TABLE `feedentryurls` (
   `feu_retry` tinyint(1) NOT NULL,
   PRIMARY KEY (`feu_id`),
   UNIQUE KEY `feu_id` (`feu_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 
 CREATE TABLE `feeds` (
@@ -35,61 +35,61 @@ CREATE TABLE `feeds` (
   `f_needs_update` tinyint(1) NOT NULL,
   PRIMARY KEY (`f_id`),
   UNIQUE KEY `f_id` (`f_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
-
-
-CREATE TABLE `pingbackcontent` (
-  `pc_id` int(11) NOT NULL AUTO_INCREMENT,
-  `pc_p_id` int(11) NOT NULL,
-  `pc_mime_type` varchar(32) NOT NULL,
-  `pc_fulltext` text NOT NULL,
-  `pc_detected_type` varchar(16) NOT NULL,
-  PRIMARY KEY (`pc_id`),
-  UNIQUE KEY `pc_id` (`pc_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 
-CREATE TABLE `pingbacks` (
-  `p_id` int(11) NOT NULL AUTO_INCREMENT,
-  `p_source` varchar(1024) CHARACTER SET latin1 NOT NULL,
-  `p_target` varchar(1024) CHARACTER SET latin1 NOT NULL,
-  `p_time` datetime NOT NULL,
-  `p_client_ip` varchar(40) CHARACTER SET latin1 NOT NULL,
-  `p_client_agent` varchar(128) CHARACTER SET latin1 NOT NULL,
-  `p_client_referer` varchar(1024) CHARACTER SET latin1 NOT NULL,
-  `p_needs_review` tinyint(1) NOT NULL,
-  `p_use` tinyint(1) NOT NULL,
-  `p_needs_update` tinyint(1) NOT NULL,
-  PRIMARY KEY (`p_id`),
-  UNIQUE KEY `p_id` (`p_id`)
+CREATE TABLE `linkbackcontent` (
+  `lc_id` int(11) NOT NULL AUTO_INCREMENT,
+  `lc_l_id` int(11) NOT NULL,
+  `lc_mime_type` varchar(32) NOT NULL,
+  `lc_fulltext` text NOT NULL,
+  `lc_detected_type` varchar(16) NOT NULL,
+  PRIMARY KEY (`lc_id`),
+  UNIQUE KEY `lc_id` (`lc_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 
-CREATE TABLE `pingbacktargets` (
-  `pt_id` int(11) NOT NULL AUTO_INCREMENT,
-  `pt_url` varchar(2048) NOT NULL,
-  PRIMARY KEY (`pt_id`),
-  UNIQUE KEY `pt_id` (`pt_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='List of pages that may receive pingbacks';
+CREATE TABLE `linkbacks` (
+  `l_id` int(11) NOT NULL AUTO_INCREMENT,
+  `l_source` varchar(1024) CHARACTER SET utf8 NOT NULL,
+  `l_target` varchar(1024) CHARACTER SET utf8 NOT NULL,
+  `l_time` datetime NOT NULL,
+  `l_client_ip` varchar(40) CHARACTER SET utf8 NOT NULL,
+  `l_client_agent` varchar(128) CHARACTER SET utf8 NOT NULL,
+  `l_client_referer` varchar(1024) CHARACTER SET utf8 NOT NULL,
+  `l_needs_review` tinyint(1) NOT NULL,
+  `l_use` tinyint(1) NOT NULL,
+  `l_needs_update` tinyint(1) NOT NULL,
+  PRIMARY KEY (`l_id`),
+  UNIQUE KEY `l_id` (`l_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `linkbacktargets` (
+  `lt_id` int(11) NOT NULL AUTO_INCREMENT,
+  `lt_url` varchar(2048) NOT NULL,
+  PRIMARY KEY (`lt_id`),
+  UNIQUE KEY `lt_id` (`lt_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='List of pages that may receive linkbacks';
 
 
 CREATE TABLE `rbookmarks` (
   `rb_id` int(11) NOT NULL AUTO_INCREMENT,
-  `rb_p_id` int(11) NOT NULL,
-  `rb_pc_id` int(11) NOT NULL,
+  `rb_l_id` int(11) NOT NULL,
+  `rb_lc_id` int(11) NOT NULL,
   `rb_target` varchar(2048) NOT NULL,
   `rb_source` varchar(2048) NOT NULL,
   `rb_source_title` varchar(256) NOT NULL,
   `rb_count` int(11) NOT NULL,
   PRIMARY KEY (`rb_id`),
   UNIQUE KEY `rb_id` (`rb_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Bookmarks, extracted from pingbackcontent';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Bookmarks, extracted from linkbackcontent';
 
 
 CREATE TABLE `rcomments` (
   `rc_id` int(11) NOT NULL AUTO_INCREMENT,
-  `rc_p_id` int(11) NOT NULL,
-  `rc_pc_id` int(11) NOT NULL,
+  `rc_l_id` int(11) NOT NULL,
+  `rc_lc_id` int(11) NOT NULL,
   `rc_target` varchar(2048) NOT NULL,
   `rc_source` varchar(2048) NOT NULL,
   `rc_title` varchar(256) NOT NULL,
@@ -100,13 +100,13 @@ CREATE TABLE `rcomments` (
   `rc_content` text NOT NULL,
   PRIMARY KEY (`rc_id`),
   UNIQUE KEY `rb_id` (`rc_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Bookmarks, extracted from pingbackcontent';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Bookmarks, extracted from linkbackcontent';
 
 
 CREATE TABLE `rlinks` (
   `rl_id` int(11) NOT NULL AUTO_INCREMENT,
-  `rl_p_id` int(11) NOT NULL,
-  `rl_pc_id` int(11) NOT NULL,
+  `rl_l_id` int(11) NOT NULL,
+  `rl_lc_id` int(11) NOT NULL,
   `rl_target` varchar(2048) NOT NULL,
   `rl_source` varchar(2048) NOT NULL,
   `rl_title` varchar(256) NOT NULL,
@@ -116,6 +116,6 @@ CREATE TABLE `rlinks` (
   `rl_author_image` varchar(2048) NOT NULL,
   PRIMARY KEY (`rl_id`),
   UNIQUE KEY `rb_id` (`rl_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Bookmarks, extracted from pingbackcontent';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Bookmarks, extracted from linkbackcontent';
 
 

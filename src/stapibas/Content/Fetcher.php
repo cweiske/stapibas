@@ -14,39 +14,36 @@ class Content_Fetcher
     }
 
     /**
-     * Fetches HTML content of all pingbacks that are marked as "needs update"
+     * Fetches HTML content of all linkbacks that are marked as "needs update"
      */
     public function updateAll()
     {
-        $this->log->info('Fetching pingback content..');
+        $this->log->info('Fetching linkback content..');
         $res = $this->db->query(
-            'SELECT * FROM pingbacks'
-            . ' WHERE p_use = 1' . $this->sqlNeedsUpdate()
+            'SELECT * FROM linkbacks'
+            . ' WHERE l_use = 1' . $this->sqlNeedsUpdate()
         );
         $items = 0;
         while ($pingbackRow = $res->fetch(\PDO::FETCH_OBJ)) {
             ++$items;
             $this->updateContent($pingbackRow);
         }
-        $this->log->info('Finished fetching %d pingback sources.', $items);
+        $this->log->info('Finished fetching %d linkback sources.', $items);
     }
 
     protected function updateContent($pingbackRow)
     {
         $this->log->info(
             'Fetching pingback source #%d: %s',
-            $pingbackRow->p_id, $pingbackRow->p_source
+            $pingbackRow->l_id, $pingbackRow->l_source
         );
 
-        $req = new \HTTP_Request2($pingbackRow->p_source);
+        $req = new \HTTP_Request2($pingbackRow->l_source);
         $req->setHeader('User-Agent', 'stapibas');
         $req->setHeader(
             'Accept',
             'application/xhtml+xml; q=1'
-            . ', application/xml; q=0.9'
-            . ', text/xml; q=0.9'
             . ', text/html; q=0.5'
-            . ', */*; q=0.1'
         );
 
         $res = $req->send();
@@ -56,23 +53,23 @@ class Content_Fetcher
             return;
         }
 
-        $qPid = $this->db->quote($pingbackRow->p_id);
-        $this->db->exec('DELETE FROM pingbackcontent WHERE pc_p_id = ' . $qPid);
-        $this->db->exec('DELETE FROM rbookmarks WHERE rb_p_id = ' . $qPid);
-        $this->db->exec('DELETE FROM rcomments  WHERE rc_p_id = ' . $qPid);
-        $this->db->exec('DELETE FROM rlinks     WHERE rl_p_id = ' . $qPid);
+        $qLid = $this->db->quote($pingbackRow->l_id);
+        $this->db->exec('DELETE FROM linkbackcontent WHERE lc_l_id = ' . $qLid);
+        $this->db->exec('DELETE FROM rbookmarks WHERE rb_l_id = ' . $qLid);
+        $this->db->exec('DELETE FROM rcomments  WHERE rc_l_id = ' . $qLid);
+        $this->db->exec('DELETE FROM rlinks     WHERE rl_l_id = ' . $qLid);
 
         $this->db->exec(
-            'INSERT INTO pingbackcontent SET'
-            . '  pc_p_id = ' . $qPid
-            . ', pc_mime_type = '
+            'INSERT INTO linkbackcontent SET'
+            . '  lc_l_id = ' . $qLid
+            . ', lc_mime_type = '
             . $this->db->quote($res->getHeader('content-type'))
-            . ', pc_fulltext = ' . $this->db->quote($res->getBody())
+            . ', lc_fulltext = ' . $this->db->quote($res->getBody())
         );
         $this->db->exec(
-            'UPDATE pingbacks'
-            . ' SET p_needs_update = 0'
-            . ' WHERE p_id = ' . $this->db->quote($pingbackRow->p_id)
+            'UPDATE linkbacks'
+            . ' SET l_needs_update = 0'
+            . ' WHERE l_id = ' . $this->db->quote($pingbackRow->l_id)
         );
     }
 
@@ -82,7 +79,7 @@ class Content_Fetcher
         if ($this->deps->options['force']) {
             return '';
         }
-        return ' AND p_needs_update = 1';
+        return ' AND l_needs_update = 1';
     }
 
 }
