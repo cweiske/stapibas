@@ -63,10 +63,12 @@ class Cli
         $mg = new Feed_Manage($deps);
         if ($command->command_name == 'add') {
             $mg->addFeed($command->command->args['feed']);
-        } else if ($command->command_name ==  'remove') {
+        } else if ($command->command_name == 'remove') {
             $mg->removeFeed($command->command->args['feed']);
-        } else {
+        } else if ($command->command_name == 'list') {
             $mg->listAll();
+        } else {
+            $this->cliParser->commands['feed']->displayUsage(1);
         }
     }
 
@@ -189,6 +191,13 @@ class Cli
             )
         );
         $add->addArgument('feed', array('description' => 'URL of feed'));
+
+        $feed->addCommand(
+            'list',
+            array(
+                'description' => 'List all feeds',
+            )
+        );
 
         $remove = $feed->addCommand(
             'remove',

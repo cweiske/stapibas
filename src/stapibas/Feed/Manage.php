@@ -22,7 +22,7 @@ class Feed_Manage
             echo '#' . $feedRow->f_id . ' ' . $feedRow->f_url . "\n";
             ++$items;
         }
-        $this->log->info('Finished pinging %d URLs.', $items);
+        $this->log->info('Finished listing %d URLs.', $items);
     }
 
     public function addFeed($url)
