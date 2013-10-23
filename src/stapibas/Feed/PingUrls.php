@@ -17,15 +17,16 @@ class Feed_PingUrls
         $this->log  = $deps->log;
 
         $this->pbc = new \PEAR2\Services\Linkback\Client();
-
-        $req = new \HTTP_Request2();
+        $req = $this->pbc->getRequest();
         $req->setConfig(
             array(
                 'ssl_verify_peer' => false,
                 'ssl_verify_host' => false
             )
         );
-        $this->pbc->setRequest($req);
+        $headers = $req->getHeaders();
+        $req->setHeader('user-agent', 'stapibas / ' . $headers['user-agent']);
+
         $this->pbc->setDebug(true);
     }
 
