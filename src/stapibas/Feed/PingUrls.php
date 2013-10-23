@@ -24,6 +24,7 @@ class Feed_PingUrls
                 'ssl_verify_host' => false
             )
         );
+        $this->pbc->setRequestTemplate($req);
         $headers = $req->getHeaders();
         $req->setHeader('user-agent', 'stapibas / ' . $headers['user-agent']);
 
