@@ -5,10 +5,7 @@
  *
  * Has to be called via POST, url given in parameter "url".
  */
-header('HTTP/1.0 500 Internal Server Error');
-header('Content-type: text/plain');
-
-require_once __DIR__ . '/../data/config.php';
+require_once 'www-header.php';
 
 if (!isset($_POST['url'])) {
     header('HTTP/1.0 400 Bad Request');
@@ -28,7 +25,6 @@ if (filter_var($url, FILTER_VALIDATE_URL) === false) {
 }
 
 
-$db = new PDO($dbdsn, $dbuser, $dbpass);
 $res = $db->query(
     'SELECT f_id, f_needs_update FROM feeds WHERE f_url = ' . $db->quote($url)
 );

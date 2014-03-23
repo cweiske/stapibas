@@ -5,11 +5,7 @@ namespace stapibas;
  *
  * @param string $url URL to get content for
  */
-header('HTTP/1.0 500 Internal Server Error');
-header('Content-type: text/plain');
-
-require_once __DIR__ . '/../data/config.php';
-require_once 'stapibas/autoloader.php';
+require_once 'www-header.php';
 
 if (!isset($_GET['url'])) {
     header('HTTP/1.0 400 Bad Request');
