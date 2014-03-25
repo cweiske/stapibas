@@ -6,6 +6,7 @@ namespace stapibas;
  */
 
 require_once '../www-header.php';
+header('Access-Control-Allow-Origin: *');
 
 if (!isset($_GET['url'])) {
     header('HTTP/1.0 400 Bad Request');
@@ -41,11 +42,15 @@ while ($linkRow = $res->fetch(\PDO::FETCH_OBJ)) {
     } else if ($linkRow->feu_retry && $linkRow->feu_tries < 5) {
         $status = 'pinging';
     } else if ($linkRow->feu_error) {
-        $status = 'error';
+        if ($linkRow->feu_error_code == 200) {
+            $status = 'unsupported';
+        } else {
+            $status = 'error';
+        }
     } else {
         $status = 'ok';
     }
-    $json->links[] = (object) array(
+    $json->links[$linkRow->feu_url] = (object) array(
         'url'     => $linkRow->feu_url,
         'pinged'  => (bool) $linkRow->feu_pinged,
         'updated' => $linkRow->feu_updated,
@@ -58,6 +63,7 @@ while ($linkRow = $res->fetch(\PDO::FETCH_OBJ)) {
     );
 }
 
+header('HTTP/1.0 200 OK');
 header('Content-type: application/json');
 echo json_encode($json) . "\n";
 ?>

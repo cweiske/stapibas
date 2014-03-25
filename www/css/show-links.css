@@ -1,0 +1,75 @@
+a.stapibas-link:after {
+    margin-left: 0.3ex;
+}
+a.stapibas-status-error:after {
+    color: red;
+    content: "✘";
+}
+a.stapibas-status-unsupported:after {
+    color: grey;
+    content: "✘";
+}
+a.stapibas-status-queued:after {
+    color: white;
+    background-color: grey;
+    content: "⌚";
+}
+a.stapibas-status-pinging:after {
+    color: white;
+    background-color: #BB0;
+    content: "…";
+}
+a.stapibas-status-ok:after {
+    color: white;
+    background-color: #0B0;
+    content: "✔";
+}
+
+.smallipop-theme-white .smallipop-content {
+    text-align: left !important;
+}
+.smallipop-theme-white {
+    width: 400px !important;
+    max-width: 600px !important;
+}
+
+.smallipop-content h2 {
+    margin: 0px;
+    margin-bottom: 0.5ex;
+    font-size: 1em;
+}
+.smallipop-content dt, .smallipop-content dd {
+    margin: 0px;
+    padding: 0px;
+}
+.smallipop-content dt {
+    font-style: italic;
+    min-width: 10ex;
+    float: left;
+    clear: both;
+}
+.smallipop-content dd {
+    float: left;
+    margin-left: 1ex;
+}
+
+.stapibas-stats {
+    text-align: center;
+    padding: 0.5ex;
+    background-color: #fcfcfc;
+    border-color: #CCC;
+}
+.stapibas-stats-error {
+    background-color: red;
+    color: white;
+}
+
+.stapibas-stats ul {
+    display: inline;
+    margin: 0px;
+    padding: 0px;
+}
+.stapibas-stats li {
+    display: inline;
+    margin-left: 5ex; 
+}
