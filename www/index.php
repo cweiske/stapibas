@@ -19,7 +19,7 @@ $baseurl = $_SERVER['REQUEST_SCHEME'] . '://'
    Add the following bookmarklet to your browser's bookmarks (right-click):
   </p>
   <p>
-   <a href="javascript:s=document.createElement('script');s.src='<?php echo $baseurl; ?>js/show-links.js';document.body.appendChild(s);">stapibas linkback stats</a>
+   <a href="javascript:s=document.createElement('script');s.src='<?php echo $baseurl; ?>js/show-links.js';document.body.appendChild(s);void(0);">stapibas linkback stats</a>
   </p>
  </body>
 </html>
