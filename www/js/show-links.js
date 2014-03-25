@@ -2,9 +2,13 @@
  * Load it with:
  * s=document.createElement('script');s.src='http://stapibas.bogo/js/show-links.js';document.body.appendChild(s);
  */
-var stapibasUrl = 'http://stapibas.bogo/';
+var scripts = document.getElementsByTagName("script");
+var thisScript = scripts[scripts.length-1];
+var thisScriptsSrc = thisScript.src;
+var stapibasUrl = thisScriptsSrc.replace('js/show-links.js', '');
+//var stapibasUrl = 'http://stapibas.bogo/';
+
 var pageUrl = window.location.href;
-//var pageUrl = 'http://cweiske.de/tagebuch/bdrem.htm';
 
 function loadScript(url, callback)
 {
@@ -15,6 +19,7 @@ function loadScript(url, callback)
     script.onload = callback;
     document.getElementsByTagName('head')[0].appendChild(script);
 }
+
 function loadData()
 {
     jQuery('head').append(
@@ -25,10 +30,11 @@ function loadData()
     );
     jQuery.ajax(
         stapibasUrl + 'api/links.php?url='
-        + encodeURIComponent(pageUrl.replace(/www.bogo/, 'cweiske.de'))
+        + encodeURIComponent(fixUrl(pageUrl))
     ).done(function(data) {showData(data);})
         .fail(function(data) {showError(data);});
 }
+
 function showData(data)
 {
     var items = jQuery('.e-content a');
@@ -61,10 +67,10 @@ function showData(data)
 
     //add link info
     items.each(function(key, elem) {
-        if (!data.links[elem.href.replace(/www.bogo/, 'cweiske.de')]) {
+        if (!data.links[fixUrl(elem.href)]) {
             return;
         }
-        var link = data.links[elem.href.replace(/www.bogo/, 'cweiske.de')];
+        var link = data.links[fixUrl(elem.href)];
         $(elem).addClass('stapibas-link')
             .addClass('stapibas-status-' + link.status);
         $(elem).smallipop(
@@ -83,6 +89,12 @@ function showData(data)
         );
     });
 }
+
+function fixUrl(url)
+{
+    return url.replace(/www.bogo/, 'cweiske.de');
+}
+
 function showError(data)
 {
     $('body').prepend(
