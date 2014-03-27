@@ -1,5 +1,80 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="stapibas" default="dist">
+<project name="stapibas" default="phar">
+
+ <property name="version"  value="0.1.0" />
+ <property name="distdir" value="${phing.dir}/dist"/>
+ <property name="pharfile" value="${distdir}/${phing.project.name}-${version}.phar" />
+ <property name="libdir" value="${phing.dir}/lib"/>
+
+ <fileset id="fs.phar" dir="${phing.dir}">
+  <include name="bin/**"/>
+  <include name="data/**"/>
+  <include name="lib/**"/>
+  <include name="src/**"/>
+  <include name="www/**"/>
+
+  <include name="README.rst"/>
+
+  <exclude name="data/config.php"/>
+ </fileset>
+
+
+ <target name="phar" depends="collectdeps"
+         description="Create zip file for release"
+ >
+  <!-- strip the shebang  -->
+  <copy file="${phing.dir}/bin/stapibas" tofile="${phing.dir}/bin/phar-stapibas.php">
+   <filterchain>
+    <striplinecomments>
+     <comment value="#" />
+    </striplinecomments>
+   </filterchain>
+  </copy>
+
+  <mkdir dir="${distdir}"/>
+  <delete file="${pharfile}"/>
+  <pharpackage basedir="${phing.dir}"
+   destfile="${pharfile}"
+   stub="${phing.dir}/src/phar-stub.php"
+   alias="bdrem.phar"
+  >
+   <fileset refid="fs.phar"/>
+  </pharpackage>
+
+  <exec executable="bzip2" dir="${phing.dir}/dist">
+   <arg value="-kf"/>
+   <arg file="${pharfile}"/>
+  </exec>
+ </target>
+
+
+ <target name="collectdeps" description="Copy package dependencies to lib/">
+  <delete>
+   <fileset dir="${libdir}">
+    <include name="**"/>
+    <exclude name="simplepie"/>
+   </fileset>
+  </delete>
+
+  <pearPackageFileset id="dep-Console_CommandLine" package="pear.php.net/Console_CommandLine"/>
+  <pearPackageFileset id="dep-HTTP_Request2" package="pear.php.net/HTTP_Request2"/>
+  <pearPackageFileset id="dep-Net_URL2" package="pear.php.net/Net_URL2"/>
+  <pearPackageFileset id="dep-PEAR" package="pear.php.net/PEAR">
+   <include name="PEAR/Exception.php"/>
+   <include name="PEAR.php"/>
+   <include name="PEAR5.php"/>
+  </pearPackageFileset>
+  <pearPackageFileset id="dep-Services_Linkback" package="pear2.php.net/Services_Linkback"/>
+
+  <copy todir="${libdir}">
+   <fileset refid="dep-Console_CommandLine"/>
+   <fileset refid="dep-HTTP_Request2"/>
+   <fileset refid="dep-Net_URL2"/>
+   <fileset refid="dep-PEAR"/>
+   <fileset refid="dep-Services_Linkback"/>
+  </copy>
+ </target>
+
 
  <target name="dump-db" description="Update data/tables.sql">
   <exec command="mysqldump --no-data --skip-add-drop-table --skip-set-charset -ustapibas -pstapibas stapibas|grep -v '/*!40' |grep -v '^--' |sed 's/AUTO_INCREMENT=[0-9]*//' > data/tables.sql" />
