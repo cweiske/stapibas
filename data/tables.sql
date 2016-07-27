@@ -20,7 +20,7 @@ CREATE TABLE `feedentryurls` (
   `feu_updated` datetime NOT NULL,
   `feu_error` tinyint(1) NOT NULL,
   `feu_error_code` varchar(6) NOT NULL,
-  `feu_error_message` varchar(128) NOT NULL,
+  `feu_error_message` varchar(4096) NOT NULL,
   `feu_tries` tinyint(4) NOT NULL,
   `feu_retry` tinyint(1) NOT NULL,
   PRIMARY KEY (`feu_id`),
