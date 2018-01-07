@@ -44,6 +44,9 @@ Let your website send out the following HTTP headers::
   X-Pingback: http://stapibas.example.org/xmlrpc.php
   Header set Link '<http://stapibas.example.org/xmlrpc.php>; rel="webmention"'
 
+Now, whitelist your domain in the database:
+Add an ``lt_url`` of ``https://example.org/%`` in the ``linkbacktargets`` table.
+
 That's all.
 
 
