@@ -2,9 +2,7 @@
     "name": "cweiske/stapibas",
     "description": "The standalone Linkback server, written in PHP.",
     "autoload": {
-        "psr-4": {
-            "stapibas\\": "src/stapibas/"
-        }
+        "classmap": ["src/"]
     },
     "require": {
         "pear/console_commandline": "^1.2.6",
