@@ -34,7 +34,7 @@ In Apache you can do this with the following configuration::
 
   Header set X-Pingback "http://stapibas.example.org/xmlrpc.php"
   Header append Link '<http://stapibas.example.org/xmlrpc.php>; rel="webmention"'
-    
+
 
 Now, whitelist your domain in the database:
 Add an ``lt_url`` of ``https://example.org/%`` in the ``linkbacktargets`` table.
@@ -93,21 +93,10 @@ extract new URLs from the feed and send pingbacks to them.
 
    $ php bin/stapibas
 
- 
+
 ============
 Dependencies
 ============
-- PHP 5.3+
+- PHP 8.0+
 - PDO
-- `Console_CommandLine`__
-- `Net_URL2`__
-- `HTTP_Request2`__
-- `PEAR2 Services_Linkback`__
-- `SimplePie`__
-
-__ http://pear.php.net/package/Console_CommandLine
-__ http://pear.php.net/package/Net_URL2
-__ http://pear.php.net/package/HTTP_Request2
-__ https://github.com/pear2/Services_Linkback
-__ http://simplepie.org/
-
+- PHP libraries that get installed with ``composer install --no-dev``

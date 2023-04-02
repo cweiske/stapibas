@@ -6,8 +6,9 @@ namespace stapibas;
  */
 class PDO extends \PDO
 {
-    public function query()
-    {
+    public function query(
+        string $query, ?int $fetchMode = null, mixed ...$fetchModeArgs
+    ): \PDOStatement|false {
         $args = func_get_args();
         $res = call_user_func_array(array('parent', 'query'), $args);
         if ($res !== false) {
@@ -17,7 +18,7 @@ class PDO extends \PDO
         $this->handleError();
     }
 
-    public function exec($statement)
+    public function exec(string $statement): int|false
     {
         $res = parent::exec($statement);
         if ($res !== false) {
