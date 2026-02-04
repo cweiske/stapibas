@@ -18,11 +18,11 @@ CREATE TABLE `feedentryurls` (
   `feu_active` tinyint(1) NOT NULL COMMENT 'if the url still exists in the entry',
   `feu_pinged` tinyint(1) NOT NULL,
   `feu_updated` datetime NOT NULL,
-  `feu_error` tinyint(1) NOT NULL,
-  `feu_error_code` varchar(6) NOT NULL,
-  `feu_error_message` varchar(4096) NOT NULL,
-  `feu_tries` tinyint(4) NOT NULL,
-  `feu_retry` tinyint(1) NOT NULL,
+  `feu_error` tinyint(1) NOT NULL DEFAULT 0,
+  `feu_error_code` varchar(6) NOT NULL DEFAULT '',
+  `feu_error_message` varchar(4096) NOT NULL DEFAULT '',
+  `feu_tries` tinyint(4) NOT NULL DEFAULT 0,
+  `feu_retry` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`feu_id`),
   UNIQUE KEY `feu_id` (`feu_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
