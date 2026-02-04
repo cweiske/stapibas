@@ -117,5 +117,3 @@ CREATE TABLE `rlinks` (
   PRIMARY KEY (`rl_id`),
   UNIQUE KEY `rb_id` (`rl_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Bookmarks, extracted from linkbackcontent';
-
-
