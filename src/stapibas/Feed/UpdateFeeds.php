@@ -112,6 +112,7 @@ class Feed_UpdateFeeds
                     'INSERT INTO feedentries SET'
                     . '  fe_f_id = ' . $this->db->quote($feedRow->f_id)
                     . ', fe_url = ' . $this->db->quote($url)
+                    . ', fe_updated = NOW()'
                     . ', fe_needs_update = 1'
                 );
                 ++$new;
