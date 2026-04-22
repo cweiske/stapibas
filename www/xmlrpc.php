@@ -3,7 +3,7 @@ namespace stapibas;
 /**
  * Simply stores all pingbacks in the database.
  */
-require_once '../vendor/autoload.php';
+require_once 'www-header.php';
 
 $s = new \PEAR2\Services\Linkback\Server();
 
